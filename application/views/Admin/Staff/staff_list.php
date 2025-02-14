@@ -56,12 +56,17 @@
 									<td><?= $staff->phone ?></td>
 									<td><?= $staff->address ?></td>
 									<td>
-										<button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editStaffModal<?= $staff->id ?>">
+										<button type="button" class="btn btn-warning btn-sm mb-2" data-bs-toggle="modal" data-bs-target="#editStaffModal<?= $staff->id ?>">
 											<i class="fi fi-rr-edit"></i> Edit
 										</button>
 										<a href="<?= base_url('admin/delete_staff/' . $staff->encrypted_id) ?>" onclick="return confirm('Are you sure you want to delete this staff?');">
-											<button type="button" class="btn btn-danger">
+											<button type="button" class="btn btn-danger btn-sm mb-2">
 												<i class="fi fi-rr-trash"></i> Delete
+											</button>
+										</a>
+										<a href="<?= base_url('admin/staff_payments/' . $staff->encrypted_id) ?>">
+											<button type="button" class="btn btn-info btn-sm mb-2">
+												<i class="fi fi-rr-credit-card"></i> Payments
 											</button>
 										</a>
 									</td>
@@ -76,30 +81,34 @@
 												<button class="btn-close py-0" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
 											</div>
 											<div class="modal-body">
-												<form role="form" action="<?= base_url('admin/update_staff/' . $staff->id) ?>" method="post" enctype="multipart/form-data">
-													<div class="form-group">
+												<form role="form" action="<?= base_url('admin/update_staff/' . $staff->encrypted_id) ?>" method="post" enctype="multipart/form-data">
+													<div class="form-group mb-3">
 														<label for="staffName">Name <span class="text-danger">*</span></label>
 														<input type="text" class="form-control" name="name" id="staffName" value="<?= $staff->name ?>" placeholder="Enter name" required>
 													</div>
-													<div class="form-group">
+													<div class="form-group mb-3">
 														<label for="staffEmail">Email</label>
 														<input type="email" class="form-control" name="email" id="staffEmail" value="<?= $staff->email ?>" placeholder="Enter email">
 													</div>
-													<div class="form-group">
+													<div class="form-group mb-3">
+														<label for="staffPassword">Password</label>
+														<input type="password" class="form-control" name="password" id="staffPassword" placeholder="Enter password">
+													</div>
+													<div class="form-group mb-3">
 														<label for="staffPhone">Phone <span class="text-danger">*</span></label>
 														<input type="text" class="form-control" name="phone" id="staffPhone" value="<?= $staff->phone ?>" placeholder="Enter phone" required>
 													</div>
-													<div class="form-group">
+													<div class="form-group mb-3">
 														<label for="staffAddress">Address</label>
 														<input type="text" class="form-control" name="address" id="staffAddress" value="<?= $staff->address ?>" placeholder="Enter address">
 													</div>
-													<div class="form-group">
+													<div class="form-group mb-3">
 														<label for="staffDescription">Description</label>
 														<textarea name="description" class="form-control" id="staffDescription" rows="3" placeholder="Enter description"><?= $staff->description ?></textarea>
 													</div>
-													<div class="form-group">
+													<div class="form-group mb-3">
 														<label for="staffImage">Photo</label>
-														<input type="file" class="form-control" name="image" id="staffImage">
+														<input type="file" class="form-control" name="staff_image" id="staffImage">
 													</div>
 													<div class="text-center mt-3">
 														<button type="submit" class="btn btn-primary">
@@ -132,31 +141,31 @@
 			</div>
 			<div class="modal-body">
 				<form role="form" action="<?= base_url('admin/add_staff') ?>" method="post" enctype="multipart/form-data">
-					<div class="form-group">
+					<div class="form-group mb-3">
 						<label for="staffName">Name <span class="text-danger">*</span></label>
 						<input type="text" class="form-control" name="name" id="staffName" placeholder="Enter name" required>
 					</div>
-					<div class="form-group">
+					<div class="form-group mb-3">
 						<label for="staffEmail">E-mail</label>
 						<input type="email" class="form-control" name="email" id="staffEmail" placeholder="Enter email">
 					</div>
-					<div class="form-group">
+					<div class="form-group mb-3">
 						<label for="staffPhone">Phone <span class="text-danger">*</span></label>
 						<input type="text" class="form-control" name="phone" id="staffPhone" placeholder="Enter phone number" required>
 					</div>
-					<div class="form-group">
+					<div class="form-group mb-3">
 						<label for="staffAddress">Address</label>
 						<input type="text" class="form-control" name="address" id="staffAddress" placeholder="Enter address">
 					</div>
-					<div class="form-group">
+					<div class="form-group mb-3">
 						<label for="staffPassword">Password <span class="text-danger">*</span></label>
 						<input type="password" class="form-control" name="password" id="staffPassword" placeholder="Enter password" required>
 					</div>
-					<div class="form-group">
+					<div class="form-group mb-3">
 						<label for="staffDescription">Description</label>
 						<textarea name="description" class="form-control" id="staffDescription" rows="5" placeholder="Enter description" style="height: auto !important;"></textarea>
 					</div>
-					<div class="form-group">
+					<div class="form-group mb-3">
 						<label for="staffImage">Image</label>
 						<input type="file" class="form-control" name="staff_image" id="staffImage">
 					</div>

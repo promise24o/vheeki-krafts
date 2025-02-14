@@ -25,6 +25,63 @@ class Admin  extends CI_Controller
 		$this->load->view('Admin/footer');
 	}
 
+	public function suppliers()
+	{
+		if ($this->session->userdata('admin_login') != TRUE)
+			redirect(base_url(), 'refresh');
+
+		$data['page_title']	=	"Suppliers";
+		$data['suppliers'] =	$this->crud_model->get_all_suppliers();
+
+		$this->load->view('Admin/header', $data);
+		$this->load->view('Admin/Suppliers/suppliers');
+		$this->load->view('Admin/footer');
+	}
+
+	public function livestock()
+	{
+		if ($this->session->userdata('admin_login') != TRUE)
+			redirect(base_url(), 'refresh');
+
+		$data['page_title']	=	"Livestock";
+		$data['livestocks'] =	$this->crud_model->get_all_livestocks();
+
+		$this->load->view('Admin/header', $data);
+		$this->load->view('Admin/Livestock/livestock');
+		$this->load->view('Admin/footer');
+	}
+
+	public function purchase()
+	{
+		if ($this->session->userdata('admin_login') != TRUE)
+			redirect(base_url(), 'refresh');
+
+		$data['page_title']	=	"Purchase";
+		$data['livestocks'] =	$this->crud_model->get_all_livestocks();
+
+		$this->load->view('Admin/header', $data);
+		$this->load->view('Admin/Purchase/purchase');
+		$this->load->view('Admin/footer');
+	}
+
+	public function livestock_variants($id)
+	{
+		if ($this->session->userdata('admin_login') != TRUE)
+			redirect(base_url(), 'refresh');
+
+		if (!$id) {
+			redirect(base_url('admin/livestock'), 'refresh');
+		}
+
+		$data['page_title']		=	"Livestock Variants";
+		$data['variants']	 	=	$this->crud_model->get_variants_by_livestock($id);
+		$data['livestock'] 		=	$this->crud_model->get_livestock_by_id($id);
+
+		$this->load->view('Admin/header', $data);
+		$this->load->view('Admin/Livestock/variants');
+		$this->load->view('Admin/footer');
+	}
+
 	public function settings()
 	{
 		if ($this->session->userdata('admin_login') != TRUE)
@@ -60,6 +117,109 @@ class Admin  extends CI_Controller
 
 		$this->load->view('Admin/header', $data);
 		$this->load->view('Admin/Staff/staff_list');
+		$this->load->view('Admin/footer');
+	}
+
+	public function clients()
+	{
+		if ($this->session->userdata('admin_login') != TRUE)
+			redirect(base_url(), 'refresh');
+
+		$data['page_title'] = "Client List";
+		$data['client_list'] = $this->crud_model->get_all_clients();
+
+		$this->load->view('Admin/header', $data);
+		$this->load->view('Admin/Client/client_list');
+		$this->load->view('Admin/footer');
+	}
+
+	public function staff_payments($id)
+	{
+		if ($this->session->userdata('admin_login') != TRUE)
+			redirect(base_url(), 'refresh');
+
+		if (!$id) {
+			redirect(base_url('admin/staff'), 'refresh');
+		}
+
+		// Get Staff Details
+		$data['staff_details'] = $this->crud_model->get_staff_by_id($id);
+
+		// Get Total Payment Amount
+		$data['total_payment_amount'] = $this->crud_model->get_total_payment_amount($id);
+
+		// Get Total Payment Count
+		$data['total_payment_count'] = $this->crud_model->get_total_payment_count($id);
+
+		// Get List of Payments
+		$data['payments'] = $this->crud_model->get_payments_by_staff($id);
+
+		// Set Page Title
+		$data['page_title'] = "Staff Payment";
+
+		// Load Views
+		$this->load->view('Admin/header', $data);
+		$this->load->view('Admin/Staff/payment');
+		$this->load->view('Admin/footer');
+	}
+
+	public function client_ledgers($id)
+	{
+		if ($this->session->userdata('admin_login') != TRUE)
+			redirect(base_url(), 'refresh');
+
+		if (!$id) {
+			redirect(base_url('admin/clients'), 'refresh');
+		}
+
+		// Get Client Details
+		$data['client_details'] = $this->crud_model->get_client($id);
+
+		// Get Total Receivable Amount
+		$data['total_receivable_amount'] = $this->crud_model->get_total_receivable_amount($id);
+
+		// Get Total Received Amount
+		$data['total_received_amount'] = $this->crud_model->get_total_received_amount($id);
+
+		// Get List of Client Payments
+		$data['client_payments'] = $this->crud_model->get_client_payments($id);
+
+		// Set Page Title
+		$data['page_title'] = "Client Ledger";
+
+		// Load Views
+		$this->load->view('Admin/header', $data);
+		$this->load->view('Admin/Client/ledgers');
+		$this->load->view('Admin/footer');
+	}
+
+	public function supplier_ledgers($id)
+	{
+		if ($this->session->userdata('admin_login') != TRUE)
+			redirect(base_url(), 'refresh');
+
+		if (!$id) {
+			redirect(base_url('admin/suppliers'), 'refresh');
+		}
+
+		// // Get Client Details
+		$data['supplier_details'] = $this->crud_model->get_supplier($id);
+
+		// // Get Total Receivable Amount
+		// $data['total_receivable_amount'] = $this->crud_model->get_total_receivable_amount($id);
+
+		// // Get Total Received Amount
+		// $data['total_received_amount'] = $this->crud_model->get_total_received_amount($id);
+
+		// // Get List of Client Payments
+		// $data['client_payments'] = $this->crud_model->get_client_payments($id);
+
+		// Set Page Title
+		$data['page_title'] = "Suppliers Ledger";
+
+		// Load Views
+		$this->load->view('Admin/header', $data);
+		$this->load->view('Admin/Suppliers/ledgers');
 		$this->load->view('Admin/footer');
 	}
 
@@ -130,7 +290,7 @@ class Admin  extends CI_Controller
 
 		if ($insert_id) {
 			// Handle file upload for image if provided
-			if ($_FILES['image']['name']) {
+			if ($_FILES['staff_image']['name']) {
 				$file_name = $insert_id . '.jpg';
 				move_uploaded_file($_FILES['staff_image']['tmp_name'], 'uploads/staff/' . $file_name);
 
@@ -180,8 +340,8 @@ class Admin  extends CI_Controller
 		$user_id  = $this->db->get_where('users', array('encrypted_id' => $id))->row()->id;
 
 		// Handle file upload for image if provided
-		if ($_FILES['image']['name']) {
-			$file_name = $user_id . '.jpg'; // File name set to staff ID
+		if ($_FILES['staff_image']['name']) {
+			$file_name = $user_id . '.jpg';
 			move_uploaded_file($_FILES['staff_image']['tmp_name'], 'uploads/staff/' . $file_name);
 			$staff_data['image'] = $file_name;
 		}
@@ -317,4 +477,351 @@ class Admin  extends CI_Controller
 
 		redirect(base_url('admin/profile'));
 	}
+
+
+	public function add_staff_payment($staff_id)
+	{
+		// Get form data
+		$payment_data = [
+			'sfp_sf_id' => $staff_id,
+			'sfp_payment_amount' => $this->input->post('payment_amount'),
+			'sfp_paid_by' => $this->input->post('paid_by'),
+			'sfp_reference' => $this->input->post('reference_number'),
+			'sfp_date' => $this->input->post('payment_date'),
+			'sfp_description' => $this->input->post('description'),
+			'sfp_created_by' => $this->session->userdata('admin_encrypted_id'),
+			'sfp_created_at' => date('Y-m-d H:i:s')
+		];
+
+		// Insert payment data
+		$insert_id = $this->crud_model->add_payment($payment_data);
+
+		if ($insert_id) {
+			$this->session->set_flashdata('success', 'Payment added successfully.');
+			redirect('/admin/staff_payments/' . $staff_id);
+		} else {
+			$this->session->set_flashdata('error', 'Failed to add payment.');
+			redirect('/admin/staff_payments/' . $staff_id);
+		}
+	}
+
+	public function delete_staff_payment($payment_id)
+	{
+		// Delete payment by ID
+		$deleted = $this->crud_model->delete_payment($payment_id);
+
+		if ($deleted) {
+			$this->session->set_flashdata('success', 'Payment deleted successfully.');
+		} else {
+			$this->session->set_flashdata('error', 'Failed to delete payment.');
+		}
+
+		redirect($_SERVER['HTTP_REFERER']);
+	}
+
+
+
+	public function add_client()
+	{
+		// Get form data
+		$client_data = [
+			'name' => $this->input->post('name'),
+			'email' => $this->input->post('email'),
+			'phone' => $this->input->post('phone'),
+			'address' => $this->input->post('address'),
+			'description' => $this->input->post('description'),
+			'encrypted_id' => random_string('alnum', 100)
+		];
+
+		// Save the client data to the database and get the inserted client ID
+		$insert_id = $this->crud_model->add_client($client_data);
+
+		if ($insert_id) {
+			// Handle file upload for image if provided
+			if ($_FILES['client_image']['name']) {
+				$file_name = $insert_id . '.jpg';
+				move_uploaded_file($_FILES['client_image']['tmp_name'], 'uploads/clients/' . $file_name);
+
+				// Update client record with the image file name
+				$this->crud_model->update_client($insert_id, ['image' => $file_name]);
+			}
+
+			$this->session->set_flashdata('success', 'Client added successfully.');
+			redirect('admin/clients');
+		} else {
+			$this->session->set_flashdata('error', 'Failed to add client.');
+			redirect('admin/clients');
+		}
+	}
+
+	public function delete_client($id)
+	{
+		// Delete the client from the database
+		if ($this->crud_model->delete_client($id)) {
+			$this->session->set_flashdata('success', 'Client deleted successfully.');
+			redirect('admin/clients');
+		} else {
+			$this->session->set_flashdata('error', 'Failed to delete client.');
+			redirect('admin/clients');
+		}
+	}
+
+	public function update_client($id)
+	{
+		// Get form data
+		$client_data = [
+			'name' => $this->input->post('name'),
+			'email' => $this->input->post('email'),
+			'phone' => $this->input->post('phone'),
+			'address' => $this->input->post('address'),
+			'description' => $this->input->post('description'),
+		];
+
+		$client_id  = $this->db->get_where('clients', array('encrypted_id' => $id))->row()->id;
+
+		// Handle file upload for image if provided
+		if ($_FILES['client_image']['name']) {
+			$file_name = $client_id . '.jpg';
+			move_uploaded_file($_FILES['client_image']['tmp_name'], 'uploads/clients/' . $file_name);
+			$client_data['image'] = $file_name;
+		}
+
+		// Update the client data in the database
+		if ($this->crud_model->update_client($id, $client_data)) {
+			$this->session->set_flashdata('success', 'Client updated successfully.');
+			redirect('admin/clients');
+		} else {
+			$this->session->set_flashdata('error', 'Failed to update client.');
+			redirect('admin/clients');
+		}
+	}
+
+
+	public function add_livestock()
+	{
+		if ($this->session->userdata('admin_login') != TRUE) {
+			redirect(base_url(), 'refresh');
+		}
+
+		// Get the current admin ID from session
+		$created_by = $this->session->userdata('admin_id');
+
+		// Prepare data for insertion
+		$data = array(
+			'ls_lst_type_id' => 1, // assuming a default livestock type, modify as necessary
+			'ls_name' => $this->input->post('name'),
+			'ls_description' => $this->input->post('description'),
+			'ls_status' => 1,
+			'ls_created_by' => $created_by,
+			'ls_created_at' => date('Y-m-d H:i:s'),
+			'ls_updated_by' => $created_by,
+			'ls_updated_at' => date('Y-m-d H:i:s'),
+			'encrypted_id' => random_string('alnum', 100)
+		);
+
+		// Call the model method to insert the data into the database
+		$insert_id = $this->crud_model->insert_livestock($data);
+
+		if ($insert_id) {
+			$this->session->set_flashdata('success', 'Livestock added successfully.');
+			redirect(base_url('admin/livestock'), 'refresh');
+		} else {
+			$this->session->set_flashdata('error', 'Failed to add livestock.');
+			redirect(base_url('admin/livestock'), 'refresh');
+		}
+	}
+
+	public function update_livestock($id)
+	{
+		if ($this->session->userdata('admin_login') != TRUE) {
+			redirect(base_url(), 'refresh');
+		}
+
+		// Get the current admin ID from session
+		$updated_by = $this->session->userdata('admin_id');
+
+		// Prepare data for update
+		$data = array(
+			'ls_name' => $this->input->post('name'),
+			'ls_description' => $this->input->post('description'),
+			'ls_updated_by' => $updated_by,
+			'ls_updated_at' => date('Y-m-d H:i:s')
+		);
+
+		// Call the model method to update the livestock data
+		$update_status = $this->crud_model->update_livestock($id, $data);
+
+		if ($update_status) {
+			$this->session->set_flashdata('success', 'Livestock updated successfully.');
+			redirect(base_url('admin/livestock'), 'refresh');
+		} else {
+			$this->session->set_flashdata('error', 'Failed to update livestock.');
+			redirect(base_url('admin/livestock'), 'refresh');
+		}
+	}
+
+	public function delete_livestock($id)
+	{
+		if ($this->session->userdata('admin_login') != TRUE) {
+			redirect(base_url(), 'refresh');
+		}
+
+		// Call the model method to delete the livestock record
+		$delete_status = $this->crud_model->delete_livestock($id);
+
+		if ($delete_status) {
+			$this->session->set_flashdata('success', 'Livestock deleted successfully.');
+			redirect(base_url('admin/livestock'), 'refresh');
+		} else {
+			$this->session->set_flashdata('error', 'Failed to delete livestock.');
+			redirect(base_url('admin/livestock'), 'refresh');
+		}
+	}
+
+
+	public function add_livestock_variant()
+	{
+		if ($this->session->userdata('admin_login') != TRUE)
+			redirect(base_url(), 'refresh');
+
+		$data = array(
+			'lst_ls_id' => $this->input->post('livestock_id'),
+			'encrypted_id' => random_string('alnum', 100),
+			'lst_title' => $this->input->post('variant_title'),
+			'lst_description' => $this->input->post('variant_description'),
+			'lst_status' => 1,
+			'lst_created_by' => $this->session->userdata('admin_id'),
+			'lst_created_at' => date('Y-m-d H:i:s'),
+			'lst_updated_by' => $this->session->userdata('admin_id'),
+			'lst_updated_at' => date('Y-m-d H:i:s'),
+		);
+
+		// Call the model method to insert the data into the database
+		$insert_id = $this->crud_model->insert_variant($data);
+
+		if ($insert_id) {
+			$this->session->set_flashdata('success', 'Livestock variant added  successfully.');
+			redirect($_SERVER['HTTP_REFERER']);
+		} else {
+			$this->session->set_flashdata('error', 'Failed to add livestock variant.');
+			redirect($_SERVER['HTTP_REFERER']);
+		}
+	}
+
+
+	public function delete_variant($variant_id)
+	{
+		if ($this->session->userdata('admin_login') != TRUE)
+			redirect(base_url(), 'refresh');
+
+		$this->crud_model->delete_variant($variant_id);
+		$this->session->set_flashdata('success', 'Livestock variant deleted successfully.');
+		redirect($_SERVER['HTTP_REFERER']);
+	}
+
+
+	public function update_livestock_variant($encrypted_id)
+	{
+		if ($this->session->userdata('admin_login') != TRUE)
+			redirect(base_url(), 'refresh');
+
+		// Get the existing variant data
+		$variant = $this->crud_model->get_variant_by_id($encrypted_id);
+
+		if ($variant) {
+			$data = array(
+				'lst_title' => $this->input->post('title'),
+				'lst_description' => $this->input->post('description'),
+				'lst_updated_by' => $this->session->userdata('admin_id'),
+				'lst_updated_at' => date('Y-m-d H:i:s'),
+			);
+
+			// Call the model method to update the variant
+			$updated = $this->crud_model->update_variant($encrypted_id, $data);
+
+			if ($updated) {
+				$this->session->set_flashdata('success', 'Livestock variant updated successfully.');
+				redirect($_SERVER['HTTP_REFERER']);
+			} else {
+				$this->session->set_flashdata('error', 'Failed to update livestock variant.');
+				redirect($_SERVER['HTTP_REFERER']);
+			}
+		} else {
+			$this->session->set_flashdata('error', 'Livestock variant not found.');
+			redirect($_SERVER['HTTP_REFERER']);
+		}
+	}
+
+
+	public function add_supplier()
+	{
+		// Get form data
+		$supplier_data = [
+			'name' => $this->input->post('name'),
+			'email' => $this->input->post('email'),
+			'phone' => $this->input->post('phone'),
+			'address' => $this->input->post('address'),
+			'description' => $this->input->post('description'),
+			'encrypted_id' => random_string('alnum', 100)
+		];
+
+		// Save the supplier data to the database and get the inserted supplier ID
+		$insert_id = $this->crud_model->add_supplier($supplier_data);
+
+		if ($insert_id) {
+			// Handle file upload for image if provided
+			if ($_FILES['supplier_image']['name']) {
+				$file_name = $insert_id . '.jpg';
+				move_uploaded_file($_FILES['supplier_image']['tmp_name'], 'uploads/suppliers/' . $file_name);
+			}
+
+			$this->session->set_flashdata('success', 'Supplier added successfully.');
+			redirect('admin/suppliers');
+		} else {
+			$this->session->set_flashdata('error', 'Failed to add supplier.');
+			redirect('admin/suppliers');
+		}
+	}
+
+	public function delete_supplier($id)
+	{
+		// Delete the supplier from the database
+		if ($this->crud_model->delete_supplier($id)) {
+			$this->session->set_flashdata('success', 'Supplier deleted successfully.');
+			redirect('admin/suppliers');
+		} else {
+			$this->session->set_flashdata('error', 'Failed to delete supplier.');
+			redirect('admin/suppliers');
+		}
+	}
+
+	public function update_supplier($id)
+	{
+		// Get form data
+		$supplier_data = [
+			'name' => $this->input->post('name'),
+			'email' => $this->input->post('email'),
+			'phone' => $this->input->post('phone'),
+			'address' => $this->input->post('address'),
+			'description' => $this->input->post('description'),
+		];
+
+		$supplier_id = $this->db->get_where('suppliers', array('encrypted_id' => $id))->row()->id;
+
+		// Handle file upload for image if provided
+		if ($_FILES['supplier_image']['name']) {
+			$file_name = $supplier_id . '.jpg';
+			move_uploaded_file($_FILES['supplier_image']['tmp_name'], 'uploads/suppliers/' . $file_name);
+		}
+
+		// Update the supplier data in the database
+		if ($this->crud_model->update_supplier($id, $supplier_data)) {
+			$this->session->set_flashdata('success', 'Supplier updated successfully.');
+			redirect('admin/suppliers');
+		} else {
+			$this->session->set_flashdata('error', 'Failed to update supplier.');
+			redirect('admin/suppliers');
+		}
+	}
+
 }

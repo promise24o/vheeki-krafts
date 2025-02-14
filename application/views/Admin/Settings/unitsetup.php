@@ -69,11 +69,11 @@
 											</div>
 											<div class="modal-body">
 												<form role="form" action="<?= base_url('admin/update_unit_settings/' . $unit['encrypted_id']) ?>" method="post" enctype="multipart/form-data">
-													<div class="form-group">
+													<div class="form-group mb-3">
 														<label for="unitName">Name <span class="text-danger">*</span></label>
 														<input type="text" class="form-control" name="un_name" id="unitName" value="<?= $unit['unit_name'] ?>" placeholder="Enter unit name" required>
 													</div>
-													<div class="form-group">
+													<div class="form-group mb-3">
 														<label for="unitDescription">Description</label>
 														<textarea name="un_description" class="form-control" id="unitDescription" rows="5" placeholder="Enter description" style="height: auto !important;"><?= $unit['unit_description'] ?></textarea>
 													</div>
@@ -107,11 +107,11 @@
 			</div>
 			<div class="modal-body">
 				<form role="form" action="<?= base_url('admin/create_unit_settings') ?>" method="post" enctype="multipart/form-data">
-					<div class="form-group">
+					<div class="form-group mb-3">
 						<label for="unitName">Name <span class="text-danger">*</span></label>
 						<input type="text" class="form-control" name="un_name" id="unitName" value="" placeholder="Enter unit name" required>
 					</div>
-					<div class="form-group">
+					<div class="form-group mb-3">
 						<label for="unitDescription">Description</label>
 						<textarea name="un_description" class="form-control" id="unitDescription" rows="5" placeholder="Enter description" style="height: auto !important;"></textarea>
 					</div>

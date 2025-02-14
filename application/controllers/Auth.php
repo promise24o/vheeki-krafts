@@ -17,6 +17,11 @@ class Auth extends CI_Controller
 		$this->load->view('Auth/footer');
 	}
 
+	public function page_not_found()
+	{
+		$this->load->view('Auth/not_found');
+	}
+
 	public function confirm_login()
 	{
 		$email = $this->input->post('email');

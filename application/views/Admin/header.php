@@ -5,9 +5,9 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="Riho admin is super flexible, powerful, clean &amp; modern responsive bootstrap 5 admin template with unlimited possibilities.">
-	<meta name="keywords" content="admin template, Riho admin template, dashboard template, flat admin template, responsive admin template, web app">
-	<meta name="author" content="pixelstrap">
+	<meta name="description" content="Lightning Layers Farm Ltd offers a cutting-edge SAAS platform designed to streamline and optimize poultry farm operations, providing modern tools for efficient farm management.">
+	<meta name="keywords" content="poultry farm software, SAAS for poultry farms, farm management software, responsive admin template, poultry operations, dashboard template">
+	<meta name="author" content="SoftPath Tech">
 	<link rel="icon" href="<?= base_url()  ?>assets/dashboard/images/favicon.png" type="image/x-icon">
 	<link rel="shortcut icon" href="<?= base_url()  ?>assets/dashboard/images/favicon.png" type="image/x-icon">
 	<title>Lightning Layers Farm Ltd <?= $page_title ?></title>
@@ -114,7 +114,7 @@
 						</li>
 
 						<li class="profile-nav onhover-dropdown">
-							<div class="media profile-media"><img class="b-r-10" src="<?= base_url()  ?>assets/dashboard/images/user/user.png" alt="">
+							<div class="media profile-media"><img class="b-r-10" src="<?= base_url()  ?>assets/dashboard/images/user/user.png" alt="" width="40">
 								<div class="media-body d-xxl-block d-none box-col-none">
 									<div class="d-flex align-items-center gap-2"> <span><?= $this->session->userdata("admin_name") ?> </span><i class="middle fa fa-angle-down"> </i></div>
 									<p class="mb-0 font-roboto">Admin</p>
@@ -174,17 +174,23 @@
 									<span>Livestock</span>
 								</a>
 							</li>
-
 							<li class="sidebar-list"><i class="fa fa-thumb-tack"></i>
-								<a class="sidebar-link sidebar-title" href="#">
+								<a class="sidebar-link sidebar-title link-nav" href="<?= base_url('admin/purchase') ?>">
 									<i class="fi fi-rr-shopping-cart-add text-white"></i>
 									<span>Purchase</span>
 								</a>
+							</li>
+
+							<li class="sidebar-list"><i class="fa fa-thumb-tack"></i>
+								<a class="sidebar-link sidebar-title" href="#">
+									<i class="fi fi-tr-house-chimney text-white"></i>
+									<span>Shed</span>
+								</a>
 								<ul class="sidebar-submenu">
-									<li><a href="<?= base_url('admin/shed-list') ?>">Shed List</a></li>
-									<li><a href="<?= base_url('admin/assign-shed') ?>">Assign to Shed</a></li>
-									<li><a href="<?= base_url('admin/death-list') ?>">Death List</a></li>
-									<li><a href="<?= base_url('admin/transfer-list') ?>">Transfer List</a></li>
+									<li><a href="<?= base_url('admin/shed_list') ?>">Shed List</a></li>
+									<li><a href="<?= base_url('admin/assign_shed') ?>">Assign to Shed</a></li>
+									<li><a href="<?= base_url('admin/death_list') ?>">Death List</a></li>
+									<li><a href="<?= base_url('admin/transfer_list') ?>">Transfer List</a></li>
 								</ul>
 							</li>
 
@@ -282,7 +288,7 @@
 							</li>
 
 							<li class="sidebar-list"><i class="fa fa-thumb-tack"></i>
-								<a class="sidebar-link sidebar-title link-nav" href="<?= base_url('admin/supplier-list') ?>">
+								<a class="sidebar-link sidebar-title link-nav" href="<?= base_url('admin/suppliers') ?>">
 									<i class="fi fi-rr-user text-white"></i>
 									<span>Supplier</span>
 								</a>
@@ -294,7 +300,7 @@
 									<span>Client</span>
 								</a>
 								<ul class="sidebar-submenu">
-									<li><a href="<?= base_url() ?>admin/client/listClient">Client List</a></li>
+									<li><a href="<?= base_url() ?>admin/clients">Client List</a></li>
 								</ul>
 							</li>
 

@@ -53,5 +53,5 @@ $route['default_controller'] = 'landing';
 $route['login'] = 'auth/login';
 $route['confirm-login'] = 'auth/confirm_login';
 $route['logout'] = 'auth/logout';
-$route['404_override'] = '';
+$route['404_override'] = 'auth/page_not_found';
 $route['translate_uri_dashes'] = FALSE;
