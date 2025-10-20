@@ -47,6 +47,12 @@ uploads/*
 application/config/database.php.local
 application/config/config.php.local
 
+# API Keys & Secrets (Never commit these)
+*_api_key.txt
+*_secret_key.txt
+*.pem
+*.key
+
 # OS Files
 *.swp
 *.swo
