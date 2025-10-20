@@ -1,32 +1,59 @@
+# System Files
 .DS_Store
+Thumbs.db
 
+# CodeIgniter
 application/cache/*
 !application/cache/index.html
+!application/cache/.htaccess
 
 application/logs/*
 !application/logs/index.html
+!application/logs/.htaccess
 
 !application/*/.htaccess
 
+# Composer
 composer.lock
-tests/mocks/database/ci_test.sqlite
+/vendor/
 
+# Testing
+tests/mocks/database/ci_test.sqlite
+/tests/tests/
+/tests/results/
+
+# User Guide
 user_guide_src/build/*
 user_guide_src/cilexer/build/*
 user_guide_src/cilexer/dist/*
 user_guide_src/cilexer/pycilexer.egg-info/*
-/vendor/
 
 # IDE Files
-#-------------------------
 /nbproject/
 .idea/*
-
-## Sublime Text cache files
+.vscode/*
+*.sublime-workspace
+*.sublime-project
 *.tmlanguage.cache
 *.tmPreferences.cache
 *.stTheme.cache
-*.sublime-workspace
-*.sublime-project
-/tests/tests/
-/tests/results/
+
+# Uploads (if you have user-uploaded files)
+uploads/*
+!uploads/.htaccess
+
+# Environment & Config (IMPORTANT - Don't commit sensitive data)
+.env
+application/config/database.php.local
+application/config/config.php.local
+
+# OS Files
+*.swp
+*.swo
+*~
+.directory
+
+# Temporary Files
+*.tmp
+*.bak
+*.log

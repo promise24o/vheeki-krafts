@@ -50,7 +50,35 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |		my-controller/my-method	-> my_controller/my_method
 */
 $route['default_controller'] = 'landing';
-$route['login'] = 'auth/login';
+$route['shop'] = 'Landing/shop';
+$route['about'] = 'Landing/about';
+$route['contact'] = 'Landing/contact';
+$route['reviews'] = 'Landing/reviews';
+$route['product/(:any)'] = 'Landing/product_detail/$1'; // Support both encrypted_id and slug
+
+// Cart routes
+$route['cart'] = 'Landing/cart';
+$route['cart/add'] = 'Landing/cart_add';
+$route['cart/update'] = 'Landing/cart_update';
+$route['cart/remove'] = 'Landing/cart_remove';
+$route['cart/clear'] = 'Landing/cart_clear';
+$route['cart/get_count'] = 'Landing/cart_get_count';
+
+// Checkout routes
+$route['checkout'] = 'Landing/checkout';
+$route['checkout/process'] = 'Landing/checkout_process';
+
+// Order routes
+$route['orders'] = 'Landing/orders';
+$route['track-order'] = 'Landing/order_track';
+$route['order/track'] = 'Landing/order_track';
+$route['order/success/(:num)'] = 'Landing/order_success/$1';
+
+// Webhook routes
+$route['webhook/paystack'] = 'Webhook/paystack';
+$route['webhook/test'] = 'Webhook/test';
+
+$route['admin'] = 'auth/login';
 $route['confirm-login'] = 'auth/confirm_login';
 $route['logout'] = 'auth/logout';
 $route['404_override'] = 'auth/page_not_found';
