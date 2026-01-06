@@ -373,11 +373,12 @@ document.addEventListener('DOMContentLoaded', function() {
 	const addToCartForm = document.getElementById('addToCartForm');
 	if (addToCartForm) {
 		addToCartForm.addEventListener('submit', function(e) {
+			e.preventDefault();
+			
 			const hasSizes = sizeButtons.length > 0;
 			const hasColors = colorButtons.length > 0;
 			
 			if (hasSizes && !selectedSizeInput.value) {
-				e.preventDefault();
 				if (typeof toastr !== 'undefined') {
 					toastr.warning('Please select a size');
 				} else {
@@ -387,7 +388,6 @@ document.addEventListener('DOMContentLoaded', function() {
 			}
 			
 			if (hasColors && !selectedColorInput.value) {
-				e.preventDefault();
 				if (typeof toastr !== 'undefined') {
 					toastr.warning('Please select a color');
 				} else {
@@ -395,6 +395,58 @@ document.addEventListener('DOMContentLoaded', function() {
 				}
 				return false;
 			}
+			
+			// Submit form via AJAX
+			const formData = new FormData(this);
+			const submitButton = this.querySelector('button[type="submit"]');
+			const originalText = submitButton.innerHTML;
+			
+			// Show loading state
+			submitButton.disabled = true;
+			submitButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Adding...';
+			
+			fetch('<?= base_url("landing/cart_add") ?>', {
+				method: 'POST',
+				body: formData,
+				headers: {
+					'X-Requested-With': 'XMLHttpRequest'
+				}
+			})
+			.then(response => response.json())
+			.then(data => {
+				if (data.success) {
+					if (typeof toastr !== 'undefined') {
+						toastr.success('Product added to cart successfully!');
+					} else {
+						alert('Product added to cart successfully!');
+					}
+					
+					// Update cart count if cart icon exists
+					const cartCountElements = document.querySelectorAll('.cart-count');
+					cartCountElements.forEach(element => {
+						element.textContent = data.cart_count || 0;
+					});
+				} else {
+					if (typeof toastr !== 'undefined') {
+						toastr.error(data.message || 'Failed to add product to cart');
+					} else {
+						alert(data.message || 'Failed to add product to cart');
+					}
+				}
+			})
+			.catch(error => {
+				console.error('Error:', error);
+				if (typeof toastr !== 'undefined') {
+					toastr.error('An error occurred. Please try again.');
+				} else {
+					alert('An error occurred. Please try again.');
+				}
+			})
+			.finally(() => {
+				// Restore button state
+				submitButton.disabled = false;
+				submitButton.innerHTML = originalText;
+			});
 		});
 	}
 });

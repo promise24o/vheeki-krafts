@@ -314,38 +314,64 @@ document.getElementById('sortProducts')?.addEventListener('change', function() {
 
 // Add to cart functionality
 document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
-	btn.addEventListener('click', function() {
-		const productId = this.dataset.productId;
-		
-		fetch('<?= base_url("cart/add") ?>', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded',
-			},
-			body: 'product_id=' + productId + '&quantity=1'
-		})
-		.then(response => response.json())
-		.then(data => {
-			if (data.success) {
-				// Show success message
-				toastr.success('Product added to cart!');
-				// Update cart count in header
-				const cartCount = document.getElementById('cartCount');
-				const sideCartCount = document.getElementById('sideCartCount');
-				if (cartCount) {
-					cartCount.textContent = data.cart_count;
-				}
-				if (sideCartCount) {
-					sideCartCount.textContent = data.cart_count;
-				}
-			} else {
-				toastr.error(data.message || 'Failed to add product to cart');
-			}
-		})
-		.catch(error => {
-			console.error('Error:', error);
-			toastr.error('An error occurred. Please try again.');
-		});
+	// Add both click and touch events for mobile compatibility
+	btn.addEventListener('click', handleAddToCart);
+	btn.addEventListener('touchend', function(e) {
+		e.preventDefault(); // Prevent double-firing on mobile
+		handleAddToCart.call(this, e);
 	});
 });
+
+function handleAddToCart(e) {
+	const productId = this.dataset.productId;
+	
+	// Show loading state
+	const originalIcon = this.innerHTML;
+	this.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+	this.style.pointerEvents = 'none';
+	
+	fetch('<?= base_url("landing/cart_add") ?>', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/x-www-form-urlencoded',
+			'X-Requested-With': 'XMLHttpRequest'
+		},
+		body: 'product_id=' + productId + '&quantity=1'
+	})
+	.then(response => response.json())
+	.then(data => {
+		if (data.success) {
+			// Show success message
+			if (typeof toastr !== 'undefined') {
+				toastr.success('Product added to cart!');
+			} else {
+				alert('Product added to cart!');
+			}
+			// Update cart count in header
+			const cartCountElements = document.querySelectorAll('.cart-count');
+			cartCountElements.forEach(element => {
+				element.textContent = data.cart_count || 0;
+			});
+		} else {
+			if (typeof toastr !== 'undefined') {
+				toastr.error(data.message || 'Failed to add product to cart');
+			} else {
+				alert(data.message || 'Failed to add product to cart');
+			}
+		}
+	})
+	.catch(error => {
+		console.error('Error:', error);
+		if (typeof toastr !== 'undefined') {
+			toastr.error('An error occurred. Please try again.');
+		} else {
+			alert('An error occurred. Please try again.');
+		}
+	})
+	.finally(() => {
+		// Restore button state
+		this.innerHTML = originalIcon;
+		this.style.pointerEvents = 'auto';
+	});
+}
 </script>
