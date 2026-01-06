@@ -120,15 +120,118 @@ toastr.options = {
 
 // Shopping Cart Functions
 function updateCartCount() {
-	fetch('<?= base_url("cart/get_count") ?>')
+	fetch('<?= base_url("landing/cart_get_count") ?>')
 		.then(response => response.json())
 		.then(data => {
 			if (data.success) {
-				document.getElementById('cartCount').textContent = data.count;
-				document.getElementById('sideCartCount').textContent = data.count;
+				// Update desktop cart counter
+				const desktopCounter = document.getElementById('cartCount');
+				if (desktopCounter) {
+					desktopCounter.textContent = data.count;
+				}
+				// Update mobile cart counter
+				const mobileCounter = document.getElementById('cartCountMobile');
+				if (mobileCounter) {
+					mobileCounter.textContent = data.count;
+				}
+				// Update cart drawer counter
+				const drawerCounter = document.getElementById('sideCartCount');
+				if (drawerCounter) {
+					drawerCounter.textContent = data.count;
+				}
 			}
 		})
 		.catch(error => console.error('Error updating cart count:', error));
+}
+
+function updateCartDrawer() {
+	fetch('<?= base_url("landing/cart_get_items") ?>')
+		.then(response => response.json())
+		.then(data => {
+			if (data.success) {
+				const container = document.getElementById('cartItemsContainer');
+				const footer = document.querySelector('#shoppingCart .offcanvas-footer');
+				
+				if (container) {
+					if (data.items.length === 0) {
+						container.innerHTML = `
+							<div class="text-center py-10">
+								<svg class="icon fs-1 text-muted mb-4" style="width: 80px; height: 80px;">
+									<use xlink:href="#icon-shopping-bag-open-light"></use>
+								</svg>
+								<p class="text-muted">Your cart is empty</p>
+								<a href="<?= base_url('shop') ?>" class="btn btn-dark mt-3">Start Shopping</a>
+							</div>
+						`;
+						if (footer) {
+							footer.style.display = 'none';
+						}
+					} else {
+						let itemsHtml = '<table class="table table-borderless"><tbody>';
+						let total = 0;
+						
+						data.items.forEach(item => {
+							const imageUrl = item.image_path || '<?= base_url("assets/admin/images/placeholder.png") ?>';
+							const productUrl = '<?= base_url("product/") ?>' + item.product_slug;
+							const subtotal = parseFloat(item.price) * parseInt(item.quantity);
+							total += subtotal;
+							
+							itemsHtml += `
+								<tr data-cart-id="${item.cart_id}">
+									<td class="ps-0">
+										<div class="d-flex align-items-center">
+											<div class="flex-grow-1">
+												<h6 class="mb-1">
+													<a href="${productUrl}" class="text-decoration-none text-body-emphasis">
+														${item.product_name}
+													</a>
+												</h6>
+												<div class="text-muted small">
+													${item.size ? 'Size: ' + item.size + '<br>' : ''}
+													${item.color ? 'Color: ' + item.color + '<br>' : ''}
+													${item.tags ? 'Tags: ' + item.tags : ''}
+												</div>
+											</div>
+											<div class="text-end">
+												<div class="fs-14px fw-semibold">₦${parseFloat(item.price).toLocaleString()}</div>
+												<div class="text-muted small">Qty: ${item.quantity}</div>
+											</div>
+										</div>
+									</td>
+									<td class="text-end pe-0">
+										<div class="d-flex align-items-center justify-content-end gap-2">
+											<button class="btn btn-sm btn-outline-secondary cart-qty-decrease" data-cart-id="${item.cart_id}">-</button>
+											<span class="cart-qty-input" data-max="${item.stock_quantity}">${item.quantity}</span>
+											<button class="btn btn-sm btn-outline-secondary cart-qty-increase" data-cart-id="${item.cart_id}">+</button>
+											<button class="btn btn-sm btn-link text-danger remove-cart-item" data-cart-id="${item.cart_id}">
+												<i class="fas fa-trash"></i>
+											</button>
+										</div>
+									</td>
+								</tr>
+							`;
+						});
+						
+						itemsHtml += '</tbody></table>';
+						container.innerHTML = itemsHtml;
+						
+						if (footer) {
+							footer.style.display = 'block';
+							const totalElement = document.getElementById('sideCartTotal');
+							if (totalElement) {
+								totalElement.textContent = '₦' + total.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+							}
+						}
+					}
+				}
+			}
+		})
+		.catch(error => console.error('Error updating cart drawer:', error));
+}
+
+function updateCartAfterAdd() {
+	updateCartCount();
+	updateCartDrawer();
 }
 
 // Remove item from cart

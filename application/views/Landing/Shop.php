@@ -347,11 +347,10 @@ function handleAddToCart(e) {
 			} else {
 				alert('Product added to cart!');
 			}
-			// Update cart count in header
-			const cartCountElements = document.querySelectorAll('.cart-count');
-			cartCountElements.forEach(element => {
-				element.textContent = data.cart_count || 0;
-			});
+			// Update all cart elements automatically
+			if (typeof updateCartAfterAdd === 'function') {
+				updateCartAfterAdd();
+			}
 		} else {
 			if (typeof toastr !== 'undefined') {
 				toastr.error(data.message || 'Failed to add product to cart');

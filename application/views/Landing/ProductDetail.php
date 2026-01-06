@@ -421,11 +421,10 @@ document.addEventListener('DOMContentLoaded', function() {
 						alert('Product added to cart successfully!');
 					}
 					
-					// Update cart count if cart icon exists
-					const cartCountElements = document.querySelectorAll('.cart-count');
-					cartCountElements.forEach(element => {
-						element.textContent = data.cart_count || 0;
-					});
+					// Update all cart elements automatically
+					if (typeof updateCartAfterAdd === 'function') {
+						updateCartAfterAdd();
+					}
 				} else {
 					if (typeof toastr !== 'undefined') {
 						toastr.error(data.message || 'Failed to add product to cart');

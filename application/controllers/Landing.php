@@ -148,6 +148,15 @@ class Landing extends CI_Controller {
         echo json_encode(['success' => true, 'count' => $count]);
     }
     
+    public function cart_get_items() {
+        $this->output->set_content_type('application/json');
+        
+        $session_id = $this->session->userdata('session_id') ?: session_id();
+        $items = $this->crud_model->get_cart_items($session_id);
+        
+        echo json_encode(['success' => true, 'items' => $items]);
+    }
+    
     // CHECKOUT
     public function checkout() {
         $data = $this->get_base_data();
