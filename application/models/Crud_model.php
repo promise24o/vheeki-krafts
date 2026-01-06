@@ -708,7 +708,7 @@ private function get_next_testimonial_sort_order()
 			$this->db->order_by('sort_order', 'ASC');
 			$this->db->limit(1);
 			$image = $this->db->get('product_images')->row_array();
-			$item['image'] = $image ? $image['image_path'] : null;
+			$item['image'] = $image ? base_url($image['image_path']) : null;
 			
 			// Calculate subtotal
 			$price = $item['discount_price'] ? $item['discount_price'] : $item['price'];
