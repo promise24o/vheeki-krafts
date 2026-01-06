@@ -177,7 +177,7 @@ window.updateCartDrawer = function() {
 						let total = 0;
 						
 						data.items.forEach(item => {
-							const imageUrl = item.image_path || '<?= base_url("assets/admin/images/placeholder.png") ?>';
+							const imageUrl = item.image || '<?= base_url("assets/admin/images/placeholder.png") ?>';
 							const productUrl = '<?= base_url("product/") ?>' + item.product_slug;
 							const subtotal = parseFloat(item.price) * parseInt(item.quantity);
 							total += subtotal;
@@ -186,6 +186,12 @@ window.updateCartDrawer = function() {
 								<tr data-cart-id="${item.cart_id}">
 									<td class="ps-0">
 										<div class="d-flex align-items-center">
+											<div class="me-6">
+												<img src="${imageUrl}" 
+													width="60" height="80" 
+													alt="${item.product_name}"
+													style="object-fit: cover;">
+											</div>
 											<div class="flex-grow-1">
 												<h6 class="mb-1">
 													<a href="${productUrl}" class="text-decoration-none text-body-emphasis">
@@ -196,6 +202,7 @@ window.updateCartDrawer = function() {
 													${item.size ? 'Size: ' + item.size + '<br>' : ''}
 													${item.color ? 'Color: ' + item.color + '<br>' : ''}
 													${item.tags ? 'Tags: ' + item.tags : ''}
+													SKU: ${item.sku}
 												</div>
 											</div>
 											<div class="text-end">
