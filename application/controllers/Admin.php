@@ -30,7 +30,8 @@ class Admin  extends CI_Controller
 		$data['page_title'] = "Dashboard";
 		$data['total_products'] = count($this->crud_model->get_all_products());
 		$data['total_categories'] = count($this->crud_model->get_all_categories());
-		$data['pending_reviews'] = count($this->crud_model->get_all_reviews(false));
+		// $data['pending_reviews'] = count($this->crud_model->get_all_reviews(false));
+		$data['pending_reviews'] = 0; // Temporarily hardcoded
 		$data['unread_messages'] = $this->crud_model->get_unread_messages_count();
 		$data['recent_products'] = $this->crud_model->get_all_products(5, 0);
 		
