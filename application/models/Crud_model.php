@@ -402,12 +402,18 @@ private function get_product_main_image($product_id)
 
 	function add_testimonial($data)
 	{
+		if (!isset($data['sort_order']) || $data['sort_order'] === 0) {
+			$data['sort_order'] = $this->get_next_testimonial_sort_order();
+		}
 		return $this->db->insert('testimonials', $data);
 	}
 
 	function update_testimonial($id, $data)
 	{
 		$this->db->where('testimonial_id', $id);
+		if (!isset($data['sort_order']) || $data['sort_order'] === 0) {
+			$data['sort_order'] = $this->get_next_testimonial_sort_order();
+		}
 		return $this->db->update('testimonials', $data);
 	}
 
@@ -524,15 +530,6 @@ private function get_next_testimonial_sort_order()
 	$this->db->select_max('sort_order');
 	$result = $this->db->get('testimonials')->row();
 	return ($result && $result->sort_order) ? $result->sort_order + 1 : 1;
-}
-
-// Add new testimonial
-function add_testimonial($data)
-{
-	if (!isset($data['sort_order']) || $data['sort_order'] === 0) {
-		$data['sort_order'] = $this->get_next_testimonial_sort_order();
-	}
-	return $this->db->insert('testimonials', $data);
 }
 
 	////////PAYMENT SETTINGS//////////
