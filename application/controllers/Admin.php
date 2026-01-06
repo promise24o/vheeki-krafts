@@ -41,7 +41,7 @@ class Admin  extends CI_Controller
 		$data['recent_orders'] = array_slice($this->crud_model->get_all_orders(), 0, 5);
 
 		$this->load->view('Components/AdminHeader', $data);
-		$this->load->view('Admin/Dashboard', $data);
+		$this->load->view('Admin/Test', $data);
 		$this->load->view('Components/AdminFooter');
 	}
 
