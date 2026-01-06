@@ -232,4 +232,64 @@
     background: #e7f1ff;
     border-left-color: #5d87ff;
 }
+
+/* Dark Mode Styles */
+@media (prefers-color-scheme: dark) {
+    .tracking-item::before {
+        background: #495057;
+    }
+    
+    .tracking-icon {
+        background: #343a40;
+        border-color: #495057;
+        color: #adb5bd;
+    }
+    
+    .tracking-item.active .tracking-icon {
+        background: #5d87ff;
+        border-color: #5d87ff;
+        color: white;
+    }
+    
+    .tracking-content {
+        background: #343a40;
+        border-left-color: #495057;
+        color: #f8f9fa;
+    }
+    
+    .tracking-item.active .tracking-content {
+        background: #1e3a5f;
+        border-left-color: #5d87ff;
+        color: #f8f9fa;
+    }
+}
+
+/* Manual dark mode class support */
+.dark .tracking-item::before {
+    background: #495057;
+}
+
+.dark .tracking-icon {
+    background: #343a40;
+    border-color: #495057;
+    color: #adb5bd;
+}
+
+.dark .tracking-item.active .tracking-icon {
+    background: #5d87ff;
+    border-color: #5d87ff;
+    color: white;
+}
+
+.dark .tracking-content {
+    background: #343a40;
+    border-left-color: #495057;
+    color: #f8f9fa;
+}
+
+.dark .tracking-item.active .tracking-content {
+    background: #1e3a5f;
+    border-left-color: #5d87ff;
+    color: #f8f9fa;
+}
 </style>
