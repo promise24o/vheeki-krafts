@@ -28,60 +28,18 @@ class Admin  extends CI_Controller
 			redirect(base_url(), 'refresh');
 
 		$data['page_title'] = "Dashboard";
+		$data['total_products'] = count($this->crud_model->get_all_products());
+		$data['total_categories'] = count($this->crud_model->get_all_categories());
+		// $data['pending_reviews'] = count($this->crud_model->get_all_reviews(false));
+		$data['pending_reviews'] = 0; // Temporarily hardcoded
+		$data['unread_messages'] = $this->crud_model->get_unread_messages_count();
+		$data['recent_products'] = $this->crud_model->get_all_products(5, 0);
 		
-		// // Test each method individually to find the issue
-		// try {
-		// 	$data['total_products'] = count($this->crud_model->get_all_products());
-		// } catch (Exception $e) {
-		// 	$data['total_products'] = 'Error: ' . $e->getMessage();
-		// }
-		
-		// try {
-		// 	$data['total_categories'] = count($this->crud_model->get_all_categories());
-		// } catch (Exception $e) {
-		// 	$data['total_categories'] = 'Error: ' . $e->getMessage();
-		// }
-		
-		// // Temporarily skip reviews
-		// $data['pending_reviews'] = 0;
-		
-		// try {
-		// 	$data['unread_messages'] = $this->crud_model->get_unread_messages_count();
-		// } catch (Exception $e) {
-		// 	$data['unread_messages'] = 'Error: ' . $e->getMessage();
-		// }
-		
-		// try {
-		// 	$data['recent_products'] = $this->crud_model->get_all_products(5, 0);
-		// } catch (Exception $e) {
-		// 	$data['recent_products'] = [];
-		// }
-		
-		// // Order statistics - test individually
-		// try {
-		// 	$all_orders = $this->crud_model->get_all_orders();
-		// 	$data['total_orders'] = count($all_orders);
-		// } catch (Exception $e) {
-		// 	$data['total_orders'] = 'Error: ' . $e->getMessage();
-		// }
-		
-		// try {
-		// 	$data['pending_orders'] = $this->crud_model->get_pending_orders_count();
-		// } catch (Exception $e) {
-		// 	$data['pending_orders'] = 'Error: ' . $e->getMessage();
-		// }
-		
-		// try {
-		// 	$data['total_revenue'] = $this->crud_model->get_total_revenue();
-		// } catch (Exception $e) {
-		// 	$data['total_revenue'] = 'Error: ' . $e->getMessage();
-		// }
-		
-		// try {
-		// 	$data['recent_orders'] = array_slice($this->crud_model->get_all_orders(), 0, 5);
-		// } catch (Exception $e) {
-		// 	$data['recent_orders'] = [];
-		// }
+		// Order statistics
+		$data['total_orders'] = count($this->crud_model->get_all_orders());
+		$data['pending_orders'] = $this->crud_model->get_pending_orders_count();
+		$data['total_revenue'] = $this->crud_model->get_total_revenue();
+		$data['recent_orders'] = array_slice($this->crud_model->get_all_orders(), 0, 5);
 
 		$this->load->view('Components/AdminHeader', $data);
 		$this->load->view('Admin/dashboard', $data);
