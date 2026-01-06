@@ -127,11 +127,10 @@
                 <th width="30">
                   <input type="checkbox" class="form-check-input" id="selectAll">
                 </th>
-                <th>Product</th>
-                <th>Reviewer</th>
-                <th>Rating</th>
-                <th>Review</th>
-                <th>Portfolio</th>
+                <th>Author</th>
+                <th>Testimonial</th>
+                <th>Image</th>
+                <th>Sort Order</th>
                 <th>Status</th>
                 <th>Date</th>
                 <th>Actions</th>
@@ -142,53 +141,36 @@
                 <?php foreach ($reviews as $review): ?>
                   <tr>
                     <td>
-                      <input type="checkbox" class="form-check-input review-checkbox" value="<?= $review['review_id'] ?>">
+                      <input type="checkbox" class="form-check-input review-checkbox" value="<?= $review['testimonial_id'] ?>">
                     </td>
                     <td>
                       <div>
-                        <h6 class="mb-0"><?= htmlspecialchars($review['product_name']) ?></h6>
-                        <small class="text-muted">ID: <?= $review['product_id'] ?></small>
-                      </div>
-                    </td>
-                    <td>
-                      <div>
-                        <h6 class="mb-0"><?= htmlspecialchars($review['customer_name']) ?></h6>
-                        <small class="text-muted"><?= htmlspecialchars($review['customer_email']) ?></small>
-                      </div>
-                    </td>
-                    <td>
-                      <div class="d-flex align-items-center">
-                        <?php for ($i = 1; $i <= 5; $i++): ?>
-                          <?php if ($i <= $review['rating']): ?>
-                            <i class="ti ti-star-filled text-warning"></i>
-                          <?php else: ?>
-                            <i class="ti ti-star text-muted"></i>
-                          <?php endif; ?>
-                        <?php endfor; ?>
-                        <span class="ms-2 fw-semibold"><?= $review['rating'] ?></span>
+                        <h6 class="mb-0"><?= htmlspecialchars($review['author_name']) ?></h6>
+                        <small class="text-muted">ID: <?= $review['testimonial_id'] ?></small>
                       </div>
                     </td>
                     <td>
                       <div style="max-width: 300px;">
-                        <p class="mb-0 text-truncate" title="<?= htmlspecialchars($review['review_text']) ?>">
-                          <?= htmlspecialchars(substr($review['review_text'], 0, 100)) ?><?= strlen($review['review_text']) > 100 ? '...' : '' ?>
+                        <p class="mb-0 text-truncate" title="<?= htmlspecialchars($review['testimonial_text']) ?>">
+                          <?= htmlspecialchars(substr($review['testimonial_text'], 0, 100)) ?><?= strlen($review['testimonial_text']) > 100 ? '...' : '' ?>
                         </p>
                       </div>
                     </td>
                     <td>
-                      <?php if (!empty($review['reviewer_portfolio'])): ?>
-                        <a href="<?= htmlspecialchars($review['reviewer_portfolio']) ?>" target="_blank" class="text-primary">
-                          <i class="ti ti-external-link"></i> View
-                        </a>
+                      <?php if (!empty($review['author_image'])): ?>
+                        <img src="<?= base_url($review['author_image']) ?>" alt="Author Image" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;">
                       <?php else: ?>
-                        <span class="text-muted">-</span>
+                        <span class="text-muted">No image</span>
                       <?php endif; ?>
                     </td>
                     <td>
-                      <?php if ($review['is_approved']): ?>
-                        <span class="badge bg-success">Approved</span>
+                      <span class="badge bg-info"><?= $review['sort_order'] ?></span>
+                    </td>
+                    <td>
+                      <?php if ($review['is_active']): ?>
+                        <span class="badge bg-success">Active</span>
                       <?php else: ?>
-                        <span class="badge bg-warning">Pending</span>
+                        <span class="badge bg-warning">Inactive</span>
                       <?php endif; ?>
                     </td>
                     <td>
@@ -196,32 +178,32 @@
                     </td>
                     <td>
                       <div class="btn-group" role="group">
-                        <a href="<?= base_url('admin/view_review/' . $review['review_id']) ?>" 
+                        <a href="<?= base_url('admin/view_review/' . $review['testimonial_id']) ?>" 
                            class="btn btn-sm btn-outline-info" 
                            data-bs-toggle="tooltip" 
                            title="View Details">
                           <i class="ti ti-eye"></i>
                         </a>
-                        <?php if (!$review['is_approved']): ?>
+                        <?php if (!$review['is_active']): ?>
                           <button type="button" 
                                   class="btn btn-sm btn-outline-success" 
-                                  onclick="approveReview(<?= $review['review_id'] ?>)"
+                                  onclick="approveReview(<?= $review['testimonial_id'] ?>)"
                                   data-bs-toggle="tooltip" 
-                                  title="Approve">
+                                  title="Activate">
                             <i class="ti ti-check"></i>
                           </button>
                         <?php else: ?>
                           <button type="button" 
                                   class="btn btn-sm btn-outline-warning" 
-                                  onclick="rejectReview(<?= $review['review_id'] ?>)"
+                                  onclick="rejectReview(<?= $review['testimonial_id'] ?>)"
                                   data-bs-toggle="tooltip" 
-                                  title="Unapprove">
+                                  title="Deactivate">
                             <i class="ti ti-x"></i>
                           </button>
                         <?php endif; ?>
                         <button type="button" 
                                 class="btn btn-sm btn-outline-danger" 
-                                onclick="deleteReview(<?= $review['review_id'] ?>)"
+                                onclick="deleteReview(<?= $review['testimonial_id'] ?>)"
                                 data-bs-toggle="tooltip" 
                                 title="Delete">
                           <i class="ti ti-trash"></i>
@@ -232,9 +214,9 @@
                 <?php endforeach; ?>
               <?php else: ?>
                 <tr>
-                  <td colspan="9" class="text-center py-5">
+                  <td colspan="8" class="text-center py-5">
                     <i class="ti ti-message-off fs-6 text-muted"></i>
-                    <p class="text-muted mt-2 mb-0">No reviews found</p>
+                    <p class="text-muted mt-2 mb-0">No testimonials found</p>
                   </td>
                 </tr>
               <?php endif; ?>

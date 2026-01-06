@@ -418,105 +418,113 @@ private function get_product_main_image($product_id)
 	}
 
 	////////REVIEWS//////////
-	// Get all reviews (simple method for dashboard)
-	function get_all_reviews($approved_only = true)
-	{
-		if ($approved_only !== false) {
-			$this->db->where('is_approved', $approved_only);
-		}
-		return $this->db->get('product_reviews')->result_array();
+// Get all reviews (using testimonials table)
+function get_all_reviews($approved_only = true)
+{
+	if ($approved_only !== false) {
+		$this->db->where('is_active', 1);
 	}
+	$this->db->order_by('sort_order', 'ASC');
+	return $this->db->get('testimonials')->result_array();
+}
 
-	// Admin: Get all reviews with filters
-	function get_all_reviews_admin($status = null, $rating = null, $search = null)
-	{
-		$this->db->select('pr.*, p.product_name, p.product_slug');
-		$this->db->from('product_reviews pr');
-		$this->db->join('products p', 'pr.product_id = p.product_id', 'left');
-		
-		if ($status !== null && $status !== '') {
-			$this->db->where('pr.is_approved', $status);
-		}
-		
-		if ($rating !== null && $rating !== '') {
-			$this->db->where('pr.rating', $rating);
-		}
-		
-		if ($search !== null && $search !== '') {
-			$this->db->group_start();
-			$this->db->like('pr.customer_name', $search);
-			$this->db->or_like('pr.review_text', $search);
-			$this->db->or_like('p.product_name', $search);
-			$this->db->group_end();
-		}
-		
-		$this->db->order_by('pr.created_at', 'DESC');
-		return $this->db->get()->result_array();
+// Admin: Get all reviews with filters (using testimonials table)
+function get_all_reviews_admin($status = null, $rating = null, $search = null)
+{
+	if ($status !== null && $status !== '') {
+		$this->db->where('is_active', $status);
 	}
+	
+	if ($search !== null && $search !== '') {
+		$this->db->group_start();
+		$this->db->like('author_name', $search);
+		$this->db->or_like('testimonial_text', $search);
+		$this->db->group_end();
+	}
+	
+	$this->db->order_by('sort_order', 'ASC');
+	return $this->db->get('testimonials')->result_array();
+}
 
-	// Admin: Get single review details
-	function get_review_by_id($review_id)
-	{
-		$this->db->select('pr.*, p.product_name, p.product_slug');
-		$this->db->from('product_reviews pr');
-		$this->db->join('products p', 'pr.product_id = p.product_id', 'left');
-		$this->db->where('pr.review_id', $review_id);
-		return $this->db->get()->row_array();
-	}
+// Admin: Get single review details (using testimonials table)
+function get_review_by_id($review_id)
+{
+	$this->db->where('testimonial_id', $review_id);
+	return $this->db->get('testimonials')->row_array();
+}
 
-	// Admin: Count reviews by status
-	function get_reviews_count_by_status($status = null)
-	{
-		if ($status !== null) {
-			$this->db->where('is_approved', $status);
-		}
-		return $this->db->count_all_results('product_reviews');
+// Admin: Count reviews by status (using testimonials table)
+function get_reviews_count_by_status($status = null)
+{
+	if ($status !== null) {
+		$this->db->where('is_active', $status);
 	}
+	return $this->db->count_all_results('testimonials');
+}
 
-	// Admin: Update review status
-	function update_review_status($review_id, $status)
-	{
-		$this->db->where('review_id', $review_id);
-		return $this->db->update('product_reviews', ['is_approved' => $status]);
-	}
+// Admin: Update review status (using testimonials table)
+function update_review_status($review_id, $status)
+{
+	$this->db->where('testimonial_id', $review_id);
+	return $this->db->update('testimonials', ['is_active' => $status]);
+}
 
-	// Admin: Delete single review
-	function delete_review($review_id)
-	{
-		$this->db->where('review_id', $review_id);
-		return $this->db->delete('product_reviews');
-	}
+// Admin: Delete single review (using testimonials table)
+function delete_review($review_id)
+{
+	$this->db->where('testimonial_id', $review_id);
+	return $this->db->delete('testimonials');
+}
 
-	// Admin: Bulk approve/reject reviews
-	function bulk_update_review_status($review_ids, $status)
-	{
-		$this->db->where_in('review_id', $review_ids);
-		return $this->db->update('product_reviews', ['is_approved' => $status]);
-	}
+// Admin: Bulk approve/reject reviews (using testimonials table)
+function bulk_update_review_status($review_ids, $status)
+{
+	$this->db->where_in('testimonial_id', $review_ids);
+	return $this->db->update('testimonials', ['is_active' => $status]);
+}
 
-	// Admin: Bulk delete reviews
-	function bulk_delete_reviews($review_ids)
-	{
-		$this->db->where_in('review_id', $review_ids);
-		return $this->db->delete('product_reviews');
-	}
+// Admin: Bulk delete reviews (using testimonials table)
+function bulk_delete_reviews($review_ids)
+{
+	$this->db->where_in('testimonial_id', $review_ids);
+	return $this->db->delete('testimonials');
+}
 
-	// Frontend: Get reviews for a product
-	function get_product_reviews($product_id, $approved_only = true)
-	{
-		$this->db->where('product_id', $product_id);
-		if ($approved_only) {
-			$this->db->where('is_approved', 1);
-		}
-		$this->db->order_by('created_at', 'DESC');
-		return $this->db->get('product_reviews')->result_array();
+// Frontend: Get reviews for a product (using testimonials table)
+function get_product_reviews($product_id, $approved_only = true)
+{
+	// Since testimonials don't have product_id, return all active testimonials
+	if ($approved_only) {
+		$this->db->where('is_active', 1);
 	}
+	$this->db->order_by('sort_order', 'ASC');
+	return $this->db->get('testimonials')->result_array();
+}
 
-	// Frontend: Add new review
-	function add_review($data)
-	{
-		return $this->db->insert('product_reviews', $data);
-	}
+// Frontend: Add new review (using testimonials table)
+function add_review($data)
+{
+	// Map review data to testimonial structure
+	$testimonial_data = [
+		'author_name' => isset($data['customer_name']) ? $data['customer_name'] : '',
+		'testimonial_text' => isset($data['review_text']) ? $data['review_text'] : '',
+		'author_image' => isset($data['author_image']) ? $data['author_image'] : NULL,
+		'is_active' => isset($data['is_approved']) ? $data['is_approved'] : 0,
+		'sort_order' => $this->get_next_testimonial_sort_order(),
+		'created_at' => date('Y-m-d H:i:s'),
+		'updated_at' => date('Y-m-d H:i:s')
+	];
+	
+	return $this->db->insert('testimonials', $testimonial_data);
+}
+
+// Helper function to get next sort order
+private function get_next_testimonial_sort_order()
+{
+	$this->db->select_max('sort_order');
+	$result = $this->db->get('testimonials')->row();
+	return ($result && $result->sort_order) ? $result->sort_order + 1 : 1;
+}
 
 	////////PAYMENT SETTINGS//////////
 	function get_payment_settings()

@@ -56,43 +56,36 @@
 						<div class="col-lg-6 mb-8">
 							<div class="card border-0 shadow-sm h-100">
 								<div class="card-body p-6">
-									<!-- Rating Stars -->
+									<!-- Author Info -->
 									<div class="d-flex align-items-center mb-4">
 										<div class="me-3">
+											<?php if (!empty($review['author_image'])): ?>
+												<img src="<?= base_url($review['author_image']) ?>" alt="<?= htmlspecialchars($review['author_name']) ?>" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;">
+											<?php else: ?>
+												<div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+													<span class="fw-bold"><?= strtoupper(substr($review['author_name'], 0, 1)) ?></span>
+												</div>
+											<?php endif; ?>
+										</div>
+										<div>
+											<h6 class="mb-0 fw-semibold"><?= htmlspecialchars($review['author_name']) ?></h6>
+											<small class="text-muted"><?= date('M d, Y', strtotime($review['created_at'])) ?></small>
+										</div>
+									</div>
+									
+									<!-- Testimonial Content -->
+									<div class="mb-4">
+										<p class="mb-0 fst-italic">"<?= htmlspecialchars($review['testimonial_text']) ?>"</p>
+									</div>
+									
+									<!-- Rating Stars (Fixed 5 stars for testimonials) -->
+									<div class="d-flex align-items-center">
+										<div class="me-3">
 											<?php for ($i = 1; $i <= 5; $i++): ?>
-												<?php if ($i <= $review['rating']): ?>
-													<i class="fas fa-star text-warning"></i>
-												<?php else: ?>
-													<i class="far fa-star text-warning"></i>
-												<?php endif; ?>
+												<i class="fas fa-star text-warning"></i>
 											<?php endfor; ?>
 										</div>
-										<span class="text-muted"><?= date('M d, Y', strtotime($review['created_at'])) ?></span>
-									</div>
-									
-									<!-- Review Content -->
-									<div class="mb-4">
-										<?php if (!empty($review['review_title'])): ?>
-											<h5 class="mb-2"><?= htmlspecialchars($review['review_title']) ?></h5>
-										<?php endif; ?>
-										<p class="mb-3"><?= htmlspecialchars($review['review_text']) ?></p>
-									</div>
-									
-									<!-- Reviewer Info -->
-									<div class="d-flex align-items-center justify-content-between">
-										<div>
-											<h6 class="mb-0 fw-semibold"><?= htmlspecialchars($review['customer_name']) ?></h6>
-											<small class="text-muted">
-												<?php if (isset($review['product_name'])): ?>
-													Reviewed: <?= htmlspecialchars($review['product_name']) ?>
-												<?php endif; ?>
-											</small>
-										</div>
-										<?php if (!empty($review['reviewer_portfolio'])): ?>
-											<a href="<?= htmlspecialchars($review['reviewer_portfolio']) ?>" target="_blank" class="btn btn-sm btn-outline-secondary">
-												<i class="fas fa-external-link-alt me-1"></i>Portfolio
-											</a>
-										<?php endif; ?>
+										<small class="text-muted">Verified Customer</small>
 									</div>
 								</div>
 							</div>
@@ -100,8 +93,8 @@
 					<?php endforeach; ?>
 				<?php else: ?>
 					<div class="col-12 text-center py-12">
-						<i class="fas fa-star fa-3x text-muted mb-4"></i>
-						<h4 class="text-muted mb-3">No Reviews Yet</h4>
+						<i class="fas fa-quote-left fa-3x text-muted mb-4"></i>
+						<h4 class="text-muted mb-3">No Testimonials Yet</h4>
 						<p class="text-muted">Be the first to share your experience with Vheeki Krafts!</p>
 						<a href="<?= base_url('shop') ?>" class="btn btn-primary mt-3">Browse Products</a>
 					</div>
