@@ -1484,6 +1484,40 @@ class Admin  extends CI_Controller
 		}
 	}
 
+	public function add_review()
+	{
+		if ($this->session->userdata('admin_login') != TRUE)
+			redirect(base_url(), 'refresh');
+
+		$data['page_title'] = "Add Review";
+
+		if ($this->input->post()) {
+			// Handle form submission
+			$review_data = array(
+				'author_name' => $this->input->post('author_name'),
+				'testimonial_text' => $this->input->post('testimonial_text'),
+				'author_image' => $this->input->post('author_image') ?: null,
+				'sort_order' => $this->input->post('sort_order') ?: 0,
+				'is_active' => $this->input->post('is_active') ? 1 : 0,
+				'created_at' => date('Y-m-d H:i:s'),
+				'updated_at' => date('Y-m-d H:i:s')
+			);
+
+			$result = $this->crud_model->add_testimonial($review_data);
+			
+			if ($result) {
+				$this->session->set_flashdata('success', 'Review added successfully.');
+				redirect('admin/reviews');
+			} else {
+				$data['error'] = 'Failed to add review. Please try again.';
+			}
+		}
+
+		$this->load->view('Components/AdminHeader', $data);
+		$this->load->view('Admin/AddReview', $data);
+		$this->load->view('Components/AdminFooter');
+	}
+
 	// CONTACT MESSAGES
 	public function contact_messages()
 	{

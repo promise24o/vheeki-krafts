@@ -77,6 +77,9 @@
         <div class="d-flex justify-content-between align-items-center mb-4">
           <h5 class="card-title fw-semibold mb-0">All Reviews</h5>
           <div class="d-flex gap-2">
+            <a href="<?= base_url('admin/add_review') ?>" class="btn btn-primary btn-sm">
+              <i class="ti ti-plus me-1"></i>Add Review
+            </a>
             <button class="btn btn-success btn-sm" id="bulkApproveBtn" style="display:none;">
               <i class="ti ti-check me-1"></i>Approve Selected
             </button>

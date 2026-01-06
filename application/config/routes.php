@@ -82,6 +82,7 @@ $route['webhook/test'] = 'Webhook/test';
 
 $route['admin'] = 'auth/login';
 $route['admin/reviews'] = 'admin/reviews';
+$route['admin/add_review'] = 'admin/add_review';
 $route['admin/view_review/(:num)'] = 'admin/view_review/$1';
 $route['confirm-login'] = 'auth/confirm_login';
 $route['logout'] = 'auth/logout';

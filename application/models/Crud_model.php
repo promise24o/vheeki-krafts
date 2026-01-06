@@ -526,6 +526,15 @@ private function get_next_testimonial_sort_order()
 	return ($result && $result->sort_order) ? $result->sort_order + 1 : 1;
 }
 
+// Add new testimonial
+function add_testimonial($data)
+{
+	if (!isset($data['sort_order']) || $data['sort_order'] === 0) {
+		$data['sort_order'] = $this->get_next_testimonial_sort_order();
+	}
+	return $this->db->insert('testimonials', $data);
+}
+
 	////////PAYMENT SETTINGS//////////
 	function get_payment_settings()
 	{
