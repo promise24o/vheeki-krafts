@@ -77,112 +77,252 @@ class Crud_model extends CI_Model
 	}
 
 	////////PRODUCTS//////////
-	function get_all_products($limit = null, $offset = null, $filters = array())
-	{
-		// Check if reviews table exists
-		$reviews_exists = $this->db->table_exists('reviews');
+// 	function get_all_products($limit = null, $offset = null, $filters = array())
+// 	{
+// 		// Check if reviews table exists
+// 		$reviews_exists = $this->db->table_exists('reviews');
 		
-		if ($reviews_exists) {
-			$this->db->select('p.*, c.category_name, 
-				COALESCE(AVG(r.rating), 0) as rating_average, 
-				COUNT(DISTINCT r.review_id) as review_count');
-		} else {
-			$this->db->select('p.*, c.category_name, 
-				0 as rating_average, 
-				0 as review_count');
-		}
+// 		if ($reviews_exists) {
+// 			$this->db->select('p.*, c.category_name, 
+// 				COALESCE(AVG(r.rating), 0) as rating_average, 
+// 				COUNT(DISTINCT r.review_id) as review_count');
+// 		} else {
+// 			$this->db->select('p.*, c.category_name, 
+// 				0 as rating_average, 
+// 				0 as review_count');
+// 		}
 		
-		$this->db->from('products p');
-		$this->db->join('categories c', 'p.category_id = c.category_id', 'left');
+// 		$this->db->from('products p');
+// 		$this->db->join('categories c', 'p.category_id = c.category_id', 'left');
 		
-		if ($reviews_exists) {
-			$this->db->join('reviews r', 'p.product_id = r.product_id AND r.is_approved = 1', 'left');
-		}
+// 		if ($reviews_exists) {
+// 			$this->db->join('reviews r', 'p.product_id = r.product_id AND r.is_approved = 1', 'left');
+// 		}
 		
-		if (!empty($filters['category_id'])) {
-			$this->db->where('p.category_id', $filters['category_id']);
-		}
+// 		if (!empty($filters['category_id'])) {
+// 			$this->db->where('p.category_id', $filters['category_id']);
+// 		}
 		
-		if (!empty($filters['is_active'])) {
-			$this->db->where('p.is_active', $filters['is_active']);
-		}
+// 		if (!empty($filters['is_active'])) {
+// 			$this->db->where('p.is_active', $filters['is_active']);
+// 		}
 		
-		// Highlight filters
-		if (!empty($filters['is_best_seller'])) {
-			$this->db->where('p.is_best_seller', 1);
-		}
-		if (!empty($filters['is_new_arrival'])) {
-			$this->db->where('p.is_new_arrival', 1);
-		}
-		if (!empty($filters['is_on_sale'])) {
-			$this->db->where('p.is_on_sale', 1);
-		}
-		if (!empty($filters['is_hot_item'])) {
-			$this->db->where('p.is_hot_item', 1);
-		}
+// 		// Highlight filters
+// 		if (!empty($filters['is_best_seller'])) {
+// 			$this->db->where('p.is_best_seller', 1);
+// 		}
+// 		if (!empty($filters['is_new_arrival'])) {
+// 			$this->db->where('p.is_new_arrival', 1);
+// 		}
+// 		if (!empty($filters['is_on_sale'])) {
+// 			$this->db->where('p.is_on_sale', 1);
+// 		}
+// 		if (!empty($filters['is_hot_item'])) {
+// 			$this->db->where('p.is_hot_item', 1);
+// 		}
 		
-		// Price range filter
-		if (!empty($filters['price_min'])) {
-			$this->db->where('COALESCE(p.discount_price, p.price) >=', $filters['price_min']);
-		}
-		if (!empty($filters['price_max'])) {
-			$this->db->where('COALESCE(p.discount_price, p.price) <=', $filters['price_max']);
-		}
+// 		// Price range filter
+// 		if (!empty($filters['price_min'])) {
+// 			$this->db->where('COALESCE(p.discount_price, p.price) >=', $filters['price_min']);
+// 		}
+// 		if (!empty($filters['price_max'])) {
+// 			$this->db->where('COALESCE(p.discount_price, p.price) <=', $filters['price_max']);
+// 		}
 		
-		if (!empty($filters['search'])) {
-			$this->db->group_start();
-			$this->db->like('p.product_name', $filters['search']);
-			$this->db->or_like('p.description', $filters['search']);
-			$this->db->or_like('p.tags', $filters['search']);
-			$this->db->group_end();
-		}
+// 		if (!empty($filters['search'])) {
+// 			$this->db->group_start();
+// 			$this->db->like('p.product_name', $filters['search']);
+// 			$this->db->or_like('p.description', $filters['search']);
+// 			$this->db->or_like('p.tags', $filters['search']);
+// 			$this->db->group_end();
+// 		}
 		
-		$this->db->group_by('p.product_id');
-		$this->db->order_by('p.created_at', 'DESC');
+// 		$this->db->group_by('p.product_id');
+// 		$this->db->order_by('p.created_at', 'DESC');
 		
-		if ($limit) {
-			$this->db->limit($limit, $offset);
-		}
+// 		if ($limit) {
+// 			$this->db->limit($limit, $offset);
+// 		}
 		
-		return $this->db->get()->result_array();
+// 		return $this->db->get()->result_array();
+// 	}
+
+// 	function get_product_by_id($id)
+// 	{
+// 		$this->db->select('p.*, c.category_name');
+// 		$this->db->from('products p');
+// 		$this->db->join('categories c', 'p.category_id = c.category_id', 'left');
+// 		$this->db->where('p.product_id', $id);
+// 		return $this->db->get()->row_array();
+// 	}
+
+// 	function get_product_by_encrypted_id($encrypted_id)
+// 	{
+// 		$this->db->select('p.*, c.category_name');
+// 		$this->db->from('products p');
+// 		$this->db->join('categories c', 'p.category_id = c.category_id', 'left');
+// 		$this->db->where('p.encrypted_id', $encrypted_id);
+// 		return $this->db->get()->row_array();
+// 	}
+
+// 	function get_product_by_slug($slug)
+// 	{
+// 		$this->db->select('p.*, c.category_name');
+// 		$this->db->from('products p');
+// 		$this->db->join('categories c', 'p.category_id = c.category_id', 'left');
+// 		$this->db->where('p.product_slug', $slug);
+// 		return $this->db->get()->row_array();
+// 	}
+
+// 	function get_product_by_slug_or_encrypted_id($identifier)
+// 	{
+// 		// Try encrypted_id first (starts with VK-)
+// 		if (strpos($identifier, 'VK-') === 0) {
+// 			return $this->get_product_by_encrypted_id($identifier);
+// 		}
+// 		// Otherwise try slug
+// 		return $this->get_product_by_slug($identifier);
+// 	}
+
+
+function get_all_products($limit = null, $offset = null, $filters = array())
+{
+	$reviews_exists = $this->db->table_exists('reviews');
+
+	if ($reviews_exists) {
+		$this->db->select('p.*, c.category_name,
+			COALESCE(AVG(r.rating), 0) as rating_average,
+			COUNT(DISTINCT r.review_id) as review_count');
+	} else {
+		$this->db->select('p.*, c.category_name,
+			0 as rating_average,
+			0 as review_count');
 	}
 
-	function get_product_by_id($id)
-	{
-		$this->db->select('p.*, c.category_name');
-		$this->db->from('products p');
-		$this->db->join('categories c', 'p.category_id = c.category_id', 'left');
-		$this->db->where('p.product_id', $id);
-		return $this->db->get()->row_array();
+	$this->db->from('products p');
+	$this->db->join('categories c', 'p.category_id = c.category_id', 'left');
+
+	if ($reviews_exists) {
+		$this->db->join('reviews r', 'p.product_id = r.product_id AND r.is_approved = 1', 'left');
 	}
 
-	function get_product_by_encrypted_id($encrypted_id)
-	{
-		$this->db->select('p.*, c.category_name');
-		$this->db->from('products p');
-		$this->db->join('categories c', 'p.category_id = c.category_id', 'left');
-		$this->db->where('p.encrypted_id', $encrypted_id);
-		return $this->db->get()->row_array();
+	if (!empty($filters['category_id'])) {
+		$this->db->where('p.category_id', $filters['category_id']);
 	}
 
-	function get_product_by_slug($slug)
-	{
-		$this->db->select('p.*, c.category_name');
-		$this->db->from('products p');
-		$this->db->join('categories c', 'p.category_id = c.category_id', 'left');
-		$this->db->where('p.product_slug', $slug);
-		return $this->db->get()->row_array();
+	if (!empty($filters['is_active'])) {
+		$this->db->where('p.is_active', $filters['is_active']);
 	}
 
-	function get_product_by_slug_or_encrypted_id($identifier)
-	{
-		// Try encrypted_id first (starts with VK-)
-		if (strpos($identifier, 'VK-') === 0) {
-			return $this->get_product_by_encrypted_id($identifier);
-		}
-		// Otherwise try slug
-		return $this->get_product_by_slug($identifier);
+	if (!empty($filters['is_best_seller'])) {
+		$this->db->where('p.is_best_seller', 1);
 	}
+	if (!empty($filters['is_new_arrival'])) {
+		$this->db->where('p.is_new_arrival', 1);
+	}
+	if (!empty($filters['is_on_sale'])) {
+		$this->db->where('p.is_on_sale', 1);
+	}
+	if (!empty($filters['is_hot_item'])) {
+		$this->db->where('p.is_hot_item', 1);
+	}
+
+	if (!empty($filters['price_min'])) {
+		$this->db->where('COALESCE(p.discount_price, p.price) >=', $filters['price_min']);
+	}
+	if (!empty($filters['price_max'])) {
+		$this->db->where('COALESCE(p.discount_price, p.price) <=', $filters['price_max']);
+	}
+
+	if (!empty($filters['search'])) {
+		$this->db->group_start();
+		$this->db->like('p.product_name', $filters['search']);
+		$this->db->or_like('p.description', $filters['search']);
+		$this->db->or_like('p.tags', $filters['search']);
+		$this->db->group_end();
+	}
+
+	$this->db->group_by('p.product_id');
+	$this->db->order_by('p.created_at', 'DESC');
+
+	if ($limit) {
+		$this->db->limit($limit, $offset);
+	}
+
+	$products = $this->db->get()->result_array();
+
+	foreach ($products as &$p) {
+		$p['main_image'] = $this->get_product_main_image($p['product_id']);
+	}
+
+	return $products;
+}
+
+function get_product_by_id($id)
+{
+	$this->db->select('p.*, c.category_name');
+	$this->db->from('products p');
+	$this->db->join('categories c', 'p.category_id = c.category_id', 'left');
+	$this->db->where('p.product_id', $id);
+	$product = $this->db->get()->row_array();
+
+	if ($product) {
+		$product['main_image'] = $this->get_product_main_image($product['product_id']);
+	}
+
+	return $product;
+}
+
+function get_product_by_encrypted_id($encrypted_id)
+{
+	$this->db->select('p.*, c.category_name');
+	$this->db->from('products p');
+	$this->db->join('categories c', 'p.category_id = c.category_id', 'left');
+	$this->db->where('p.encrypted_id', $encrypted_id);
+	$product = $this->db->get()->row_array();
+
+	if ($product) {
+		$product['main_image'] = $this->get_product_main_image($product['product_id']);
+	}
+
+	return $product;
+}
+
+function get_product_by_slug($slug)
+{
+	$this->db->select('p.*, c.category_name');
+	$this->db->from('products p');
+	$this->db->join('categories c', 'p.category_id = c.category_id', 'left');
+	$this->db->where('p.product_slug', $slug);
+	$product = $this->db->get()->row_array();
+
+	if ($product) {
+		$product['main_image'] = $this->get_product_main_image($product['product_id']);
+	}
+
+	return $product;
+}
+
+function get_product_by_slug_or_encrypted_id($identifier)
+{
+	if (strpos($identifier, 'VK-') === 0) {
+		return $this->get_product_by_encrypted_id($identifier);
+	}
+	return $this->get_product_by_slug($identifier);
+}
+
+private function get_product_main_image($product_id)
+{
+	$this->db->select('image_path');
+	$this->db->from('product_images');
+	$this->db->where('product_id', $product_id);
+	$this->db->order_by('image_id', 'ASC');
+	$this->db->limit(1);
+
+	$row = $this->db->get()->row_array();
+	return $row ? $row['image_path'] : null;
+}
+
 
 	function add_product($data)
 	{
@@ -594,12 +734,34 @@ class Crud_model extends CI_Model
 	public function create_order($data)
 	{
 		$this->db->insert('orders', $data);
+		
+		if ($this->db->error()['code'] != 0) {
+			log_message('error', 'Database error creating order: ' . $this->db->error()['message']);
+			log_message('error', 'Order data: ' . json_encode($data));
+			return false;
+		}
+		
 		return $this->db->insert_id();
 	}
 
 	public function add_order_items($items)
 	{
-		return $this->db->insert_batch('order_items', $items);
+		if (empty($items)) {
+			log_message('error', 'add_order_items called with empty items array');
+			return false;
+		}
+		
+		$result = $this->db->insert_batch('order_items', $items);
+		
+		if ($this->db->error()['code'] != 0) {
+			$error = $this->db->error();
+			log_message('error', 'Database error adding order items: ' . $error['message']);
+			log_message('error', 'Items data: ' . json_encode($items));
+			log_message('error', 'Last query: ' . $this->db->last_query());
+			return false;
+		}
+		
+		return $result;
 	}
 
 	public function get_order_by_id($order_id)
@@ -680,7 +842,11 @@ class Crud_model extends CI_Model
 	// ADMIN ORDER MANAGEMENT
 	public function get_all_orders()
 	{
-		$this->db->select('o.*, COUNT(oi.item_id) as items_count');
+		// Get column names dynamically
+		$columns = $this->db->list_fields('order_items');
+		$id_column = in_array('order_item_id', $columns) ? 'order_item_id' : 'item_id';
+		
+		$this->db->select("o.*, COUNT(oi.{$id_column}) as items_count");
 		$this->db->from('orders o');
 		$this->db->join('order_items oi', 'o.order_id = oi.order_id', 'left');
 		$this->db->group_by('o.order_id');
@@ -710,8 +876,22 @@ class Crud_model extends CI_Model
 
 	public function get_order_items_by_order_id($order_id)
 	{
-		$this->db->select('oi.*, oi.product_name, oi.product_sku as sku, oi.unit_price as price, oi.total_price as subtotal');
+		// Get column names dynamically
+		$columns = $this->db->list_fields('order_items');
+		$has_price = in_array('price', $columns);
+		$has_subtotal = in_array('subtotal', $columns);
+		
+		// Build select based on available columns
+		if ($has_price && $has_subtotal) {
+			// New schema
+			$this->db->select('oi.*, p.product_name, p.sku, oi.price, oi.subtotal');
+		} else {
+			// Old schema
+			$this->db->select('oi.*, p.product_name, p.sku, oi.unit_price as price, oi.total_price as subtotal');
+		}
+		
 		$this->db->from('order_items oi');
+		$this->db->join('products p', 'p.product_id = oi.product_id', 'left');
 		$this->db->where('oi.order_id', $order_id);
 		$items = $this->db->get()->result_array();
 
@@ -769,13 +949,29 @@ class Crud_model extends CI_Model
 
 	public function add_tracking_log($order_id, $status, $message, $created_by = 'System')
 	{
+		// Check if table exists first
+		if (!$this->db->table_exists('order_tracking_logs')) {
+			log_message('warning', 'order_tracking_logs table does not exist. Skipping tracking log.');
+			return false;
+		}
+		
 		$data = [
 			'order_id' => $order_id,
 			'status' => $status,
 			'message' => $message,
 			'created_by' => $created_by
 		];
-		return $this->db->insert('order_tracking_logs', $data);
+		
+		$result = $this->db->insert('order_tracking_logs', $data);
+		
+		if ($this->db->error()['code'] != 0) {
+			$error = $this->db->error();
+			log_message('error', 'Database error adding tracking log: ' . $error['message']);
+			log_message('error', 'Tracking data: ' . json_encode($data));
+			return false;
+		}
+		
+		return $result;
 	}
 
 	public function get_tracking_logs($order_id)
@@ -829,5 +1025,35 @@ class Crud_model extends CI_Model
 	{
 		$this->db->where('transaction_id', $reference);
 		return $this->db->get('orders')->row_array();
+	}
+
+	// ADMIN PROFILE MANAGEMENT
+	public function get_admin_profile()
+	{
+		$admin_id = $this->session->userdata('admin_id');
+		if (!$admin_id) {
+			return null;
+		}
+		return $this->db->get_where('admins', ['admin_id' => $admin_id])->row_array();
+	}
+
+	public function update_admin_profile($data)
+	{
+		$admin_id = $this->session->userdata('admin_id');
+		if (!$admin_id) {
+			return false;
+		}
+		$this->db->where('admin_id', $admin_id);
+		return $this->db->update('admins', $data);
+	}
+
+	public function update_admin_password($hashed_password)
+	{
+		$admin_id = $this->session->userdata('admin_id');
+		if (!$admin_id) {
+			return false;
+		}
+		$this->db->where('admin_id', $admin_id);
+		return $this->db->update('admins', ['admin_password' => $hashed_password]);
 	}
 }

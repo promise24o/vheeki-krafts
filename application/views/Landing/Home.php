@@ -21,7 +21,7 @@
 							</div>
 						</div>
 						<div class="lazy-bg bg-overlay position-absolute z-index-1 w-100 h-100"
-							data-bg-src="<?= base_url('uploads/banners/' . $banner['background_image']) ?>">
+							data-bg-src="<?= base_url('uploads/banners/' . $banner['banner_id'].'.jpg') ?>">
 						</div>
 						<div data-animate="fadeInDown"
 							class="hero-creative-dots position-absolute bottom-0 mb-7 start-50 translate-middle-x">
@@ -67,341 +67,49 @@
 				</div>
 			</div>
 			<div class="container-fluid mb-4">
+				<?php if (!empty($best_sellers)): ?>
 				<div class="slick-slider our-best-seller-4"
 					data-slick-options='{"arrows":true,"centerMode":true,"centerPadding":"calc((100% - 1440px) / 2)","dots":true,"infinite":true,"responsive":[{"breakpoint":1200,"settings":{"arrows":false,"dots":false,"slidesToShow":3}},{"breakpoint":992,"settings":{"arrows":false,"dots":false,"slidesToShow":2}},{"breakpoint":576,"settings":{"arrows":false,"dots":false,"slidesToShow":1}}],"slidesToShow":4}'>
+					<?php foreach ($best_sellers as $product): 
+						$original_price = $product['price'];
+						$discount = $product['discount_percentage'];
+						$final_price = $original_price - ($original_price * $discount / 100);
+						$product_url = base_url('product/' . (!empty($product['slug']) ? $product['slug'] : $product['encrypted_id']));
+						$main_image = !empty($product['main_image']) ? base_url('uploads/products/' . $product['main_image']) : base_url('assets/landing/images/products/product-placeholder.jpg');
+					?>
 					<div data-animate="fadeInUp">
 						<div class="card card-product grid-1 bg-transparent border-0">
 							<figure class="card-img-top position-relative mb-7 overflow-hidden">
-								<a href="<?= base_url('shop/product-details') ?>" class="hover-zoom-in d-block"
-									title="Handwoven Basket">
+								<a  href="<?= base_url('product/' . $product['product_slug']) ?>"  class="hover-zoom-in d-block"
+									title="<?= htmlspecialchars($product['product_name']) ?>">
 									<img src="#"
-										data-src="<?= base_url() ?>assets/landing/images/products/product-01-330x440.jpg"
-										class="img-fluid lazy-image w-100" alt="Handwoven Basket" width="330"
+										data-src="<?= $main_image ?>"
+										class="img-fluid lazy-image w-100" alt="<?= htmlspecialchars($product['product_name']) ?>" width="330"
 										height="440">
 								</a>
+								<?php if ($discount > 0): ?>
 								<div class="position-absolute product-flash z-index-2"><span
-										class="badge badge-product-flash on-sale bg-primary">-25%</span></div>
-								<div class="position-absolute d-flex z-index-2 product-actions horizontal">
-									<a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm add_to_cart"
-										href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-										data-bs-title="Add To Cart">
-										<svg class="icon icon-shopping-bag-open-light">
-											<use xlink:href="#icon-shopping-bag-open-light"></use>
-										</svg>
-									</a>
-									<a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm quick-view"
-										href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-										data-bs-title="Quick View">
-										<span data-bs-toggle="modal" data-bs-target="#quickViewModal"
-											class="d-flex align-items-center justify-content-center">
-											<svg class="icon icon-eye-light">
-												<use xlink:href="#icon-eye-light"></use>
-											</svg>
-										</span>
-									</a>
-									<a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm wishlist"
-										href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-										data-bs-title="Add To Wishlist">
-										<svg class="icon icon-star-light">
-											<use xlink:href="#icon-star-light"></use>
-										</svg>
-									</a>
-									<a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm compare"
-										href="<?= base_url('shop/compare') ?>" data-bs-toggle="tooltip" data-bs-placement="top"
-										data-bs-title="Compare">
-										<svg class="icon icon-arrows-left-right-light">
-											<use xlink:href="#icon-arrows-left-right-light"></use>
-										</svg>
-									</a>
-								</div>
-							</figure>
-							<div class="card-body text-center p-0">
-								<span class="d-flex align-items-center price text-body-emphasis fw-bold justify-content-center mb-3 fs-6">
-									<del class="text-body fw-500 me-4 fs-13px">$40.00</del>
-									<ins class="text-decoration-none">$30.00</ins>
-								</span>
-								<h4 class="product-title card-title text-primary-hover text-body-emphasis fs-15px fw-500 mb-3">
-									<a class="text-decoration-none text-reset" href="<?= base_url('shop/product-details') ?>">Handwoven Basket</a>
-								</h4>
-								<div class="d-flex align-items-center fs-12px justify-content-center">
-									<div class="rating">
-										<div class="empty-stars">
-											<span class="star"><svg class="icon star-o">
-													<use xlink:href="#star-o"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star-o">
-													<use xlink:href="#star-o"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star-o">
-													<use xlink:href="#star-o"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star-o">
-													<use xlink:href="#star-o"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star-o">
-													<use xlink:href="#star-o"></use>
-												</svg></span>
-										</div>
-										<div class="filled-stars" style="width: 80%">
-											<span class="star"><svg class="icon star text-primary">
-													<use xlink:href="#star"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star text-primary">
-													<use xlink:href="#star"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star text-primary">
-													<use xlink:href="#star"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star text-primary">
-													<use xlink:href="#star"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star text-primary">
-													<use xlink:href="#star"></use>
-												</svg></span>
-										</div>
-									</div>
-									<span class="reviews ms-4 pt-3 fs-14px">2947 reviews</span>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div data-animate="fadeInUp">
-						<div class="card card-product grid-1 bg-transparent border-0">
-							<figure class="card-img-top position-relative mb-7 overflow-hidden">
-								<a href="<?= base_url('shop/product-details') ?>" class="hover-zoom-in d-block"
-									title="Ceramic Vase">
-									<img src="#"
-										data-src="<?= base_url() ?>assets/landing/images/products/product-02-330x440.jpg"
-										class="img-fluid lazy-image w-100" alt="Ceramic Vase" width="330"
-										height="440">
-								</a>
-								<div class="position-absolute d-flex z-index-2 product-actions horizontal">
-									<a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm add_to_cart"
-										href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-										data-bs-title="Add To Cart">
-										<svg class="icon icon-shopping-bag-open-light">
-											<use xlink:href="#icon-shopping-bag-open-light"></use>
-										</svg>
-									</a>
-									<a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm quick-view"
-										href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-										data-bs-title="Quick View">
-										<span data-bs-toggle="modal" data-bs-target="#quickViewModal"
-											class="d-flex align-items-center justify-content-center">
-											<svg class="icon icon-eye-light">
-												<use xlink:href="#icon-eye-light"></use>
-											</svg>
-										</span>
-									</a>
-									<a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm wishlist"
-										href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-										data-bs-title="Add To Wishlist">
-										<svg class="icon icon-star-light">
-											<use xlink:href="#icon-star-light"></use>
-										</svg>
-									</a>
-									<a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm compare"
-										href="<?= base_url('shop/compare') ?>" data-bs-toggle="tooltip" data-bs-placement="top"
-										data-bs-title="Compare">
-										<svg class="icon icon-arrows-left-right-light">
-											<use xlink:href="#icon-arrows-left-right-light"></use>
-										</svg>
-									</a>
-								</div>
-							</figure>
-							<div class="card-body text-center p-0">
-								<span class="d-flex align-items-center price text-body-emphasis fw-bold justify-content-center mb-3 fs-6">$20.00</span>
-								<h4 class="product-title card-title text-primary-hover text-body-emphasis fs-15px fw-500 mb-3">
-									<a class="text-decoration-none text-reset" href="<?= base_url('shop/product-details') ?>">Ceramic Vase</a>
-								</h4>
-								<div class="d-flex align-items-center fs-12px justify-content-center">
-									<div class="rating">
-										<div class="empty-stars">
-											<span class="star"><svg class="icon star-o">
-													<use xlink:href="#star-o"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star-o">
-													<use xlink:href="#star-o"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star-o">
-													<use xlink:href="#star-o"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star-o">
-													<use xlink:href="#star-o"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star-o">
-													<use xlink:href="#star-o"></use>
-												</svg></span>
-										</div>
-										<div class="filled-stars" style="width: 100%">
-											<span class="star"><svg class="icon star text-primary">
-													<use xlink:href="#star"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star text-primary">
-													<use xlink:href="#star"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star text-primary">
-													<use xlink:href="#star"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star text-primary">
-													<use xlink:href="#star"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star text-primary">
-													<use xlink:href="#star"></use>
-												</svg></span>
-										</div>
-									</div>
-									<span class="reviews ms-4 pt-3 fs-14px">2947 reviews</span>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div data-animate="fadeInUp">
-						<div class="card card-product grid-1 bg-transparent border-0">
-							<figure class="card-img-top position-relative mb-7 overflow-hidden">
-								<a href="<?= base_url('shop/product-details') ?>" class="hover-zoom-in d-block"
-									title="Wooden Sculpture">
-									<img src="#"
-										data-src="<?= base_url() ?>assets/landing/images/products/product-03-330x440.jpg"
-										class="img-fluid lazy-image w-100" alt="Wooden Sculpture" width="330"
-										height="440">
-								</a>
+										class="badge badge-product-flash on-sale bg-primary">-<?= number_format($discount) ?>%</span></div>
+								<?php elseif ($product['is_new_arrival']): ?>
 								<div class="position-absolute product-flash z-index-2"><span
 										class="badge badge-product-flash on-new">New</span></div>
-								<div class="position-absolute d-flex z-index-2 product-actions horizontal">
-									<a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm add_to_cart"
-										href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-										data-bs-title="Add To Cart">
-										<svg class="icon icon-shopping-bag-open-light">
-											<use xlink:href="#icon-shopping-bag-open-light"></use>
-										</svg>
-									</a>
-									<a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm quick-view"
-										href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-										data-bs-title="Quick View">
-										<span data-bs-toggle="modal" data-bs-target="#quickViewModal"
-											class="d-flex align-items-center justify-content-center">
-											<svg class="icon icon-eye-light">
-												<use xlink:href="#icon-eye-light"></use>
-											</svg>
-										</span>
-									</a>
-									<a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm wishlist"
-										href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-										data-bs-title="Add To Wishlist">
-										<svg class="icon icon-star-light">
-											<use xlink:href="#icon-star-light"></use>
-										</svg>
-									</a>
-									<a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm compare"
-										href="<?= base_url('shop/compare') ?>" data-bs-toggle="tooltip" data-bs-placement="top"
-										data-bs-title="Compare">
-										<svg class="icon icon-arrows-left-right-light">
-											<use xlink:href="#icon-arrows-left-right-light"></use>
-										</svg>
-									</a>
-								</div>
-							</figure>
-							<div class="card-body text-center p-0">
-								<span class="d-flex align-items-center price text-body-emphasis fw-bold justify-content-center mb-3 fs-6">$29.00</span>
-								<h4 class="product-title card-title text-primary-hover text-body-emphasis fs-15px fw-500 mb-3">
-									<a class="text-decoration-none text-reset" href="<?= base_url('shop/product-details') ?>">Wooden Sculpture</a>
-								</h4>
-								<div class="d-flex align-items-center fs-12px justify-content-center">
-									<div class="rating">
-										<div class="empty-stars">
-											<span class="star"><svg class="icon star-o">
-													<use xlink:href="#star-o"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star-o">
-													<use xlink:href="#star-o"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star-o">
-													<use xlink:href="#star-o"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star-o">
-													<use xlink:href="#star-o"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star-o">
-													<use xlink:href="#star-o"></use>
-												</svg></span>
-										</div>
-										<div class="filled-stars" style="width: 100%">
-											<span class="star"><svg class="icon star text-primary">
-													<use xlink:href="#star"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star text-primary">
-													<use xlink:href="#star"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star text-primary">
-													<use xlink:href="#star"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star text-primary">
-													<use xlink:href="#star"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star text-primary">
-													<use xlink:href="#star"></use>
-												</svg></span>
-										</div>
-									</div>
-									<span class="reviews ms-4 pt-3 fs-14px">2947 reviews</span>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div data-animate="fadeInUp">
-						<div class="card card-product grid-1 bg-transparent border-0">
-							<figure class="card-img-top position-relative mb-7 overflow-hidden">
-								<a href="<?= base_url('shop/product-details') ?>" class="hover-zoom-in d-block"
-									title="Beaded Necklace">
-									<img src="#"
-										data-src="<?= base_url() ?>assets/landing/images/products/product-04-330x440.jpg"
-										class="img-fluid lazy-image w-100" alt="Beaded Necklace" width="330"
-										height="440">
-								</a>
+								<?php elseif ($product['is_hot_item']): ?>
 								<div class="position-absolute product-flash z-index-2"><span
-										class="badge badge-product-flash on-sale bg-primary">-24%</span></div>
-								<div class="position-absolute d-flex z-index-2 product-actions horizontal">
-									<a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm add_to_cart"
-										href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-										data-bs-title="Add To Cart">
-										<svg class="icon icon-shopping-bag-open-light">
-											<use xlink:href="#icon-shopping-bag-open-light"></use>
-										</svg>
-									</a>
-									<a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm quick-view"
-										href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-										data-bs-title="Quick View">
-										<span data-bs-toggle="modal" data-bs-target="#quickViewModal"
-											class="d-flex align-items-center justify-content-center">
-											<svg class="icon icon-eye-light">
-												<use xlink:href="#icon-eye-light"></use>
-											</svg>
-										</span>
-									</a>
-									<a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm wishlist"
-										href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-										data-bs-title="Add To Wishlist">
-										<svg class="icon icon-star-light">
-											<use xlink:href="#icon-star-light"></use>
-										</svg>
-									</a>
-									<a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm compare"
-										href="<?= base_url('shop/compare') ?>" data-bs-toggle="tooltip" data-bs-placement="top"
-										data-bs-title="Compare">
-										<svg class="icon icon-arrows-left-right-light">
-											<use xlink:href="#icon-arrows-left-right-light"></use>
-										</svg>
-									</a>
-								</div>
+										class="badge badge-product-flash bg-danger">Hot</span></div>
+								<?php endif; ?>
+								
 							</figure>
 							<div class="card-body text-center p-0">
 								<span class="d-flex align-items-center price text-body-emphasis fw-bold justify-content-center mb-3 fs-6">
-									<del class="text-body fw-500 me-4 fs-13px">$25.00</del>
-									<ins class="text-decoration-none">$19.00</ins>
+									<?php if ($discount > 0): ?>
+									<del class="text-body fw-500 me-4 fs-13px">₦<?= number_format($original_price, 2) ?></del>
+									<ins class="text-decoration-none">₦<?= number_format($final_price, 2) ?></ins>
+									<?php else: ?>
+									₦<?= number_format($original_price, 2) ?>
+									<?php endif; ?>
 								</span>
 								<h4 class="product-title card-title text-primary-hover text-body-emphasis fs-15px fw-500 mb-3">
-									<a class="text-decoration-none text-reset" href="<?= base_url('shop/product-details') ?>">Beaded Necklace</a>
+									<a class="text-decoration-none text-reset" href="<?= $product_url ?>"><?= htmlspecialchars($product['product_name']) ?></a>
 								</h4>
 								<div class="d-flex align-items-center fs-12px justify-content-center">
 									<div class="rating">
@@ -422,7 +130,7 @@
 													<use xlink:href="#star-o"></use>
 												</svg></span>
 										</div>
-										<div class="filled-stars" style="width: 80%">
+										<div class="filled-stars" style="width: <?= isset($product['average_rating']) ? ($product['average_rating'] * 20) : 0 ?>%">
 											<span class="star"><svg class="icon star text-primary">
 													<use xlink:href="#star"></use>
 												</svg></span>
@@ -440,290 +148,19 @@
 												</svg></span>
 										</div>
 									</div>
-									<span class="reviews ms-4 pt-3 fs-14px">2947 reviews</span>
+									<span class="reviews ms-4 pt-3 fs-14px"><?= isset($product['review_count']) ? $product['review_count'] : 0 ?> reviews</span>
 								</div>
 							</div>
 						</div>
 					</div>
-					<div data-animate="fadeInUp">
-						<div class="card card-product grid-1 bg-transparent border-0">
-							<figure class="card-img-top position-relative mb-7 overflow-hidden">
-								<a href="<?= base_url('shop/product-details') ?>" class="hover-zoom-in d-block"
-									title="Embroidered Textile">
-									<img src="#"
-										data-src="<?= base_url() ?>assets/landing/images/products/product-05-330x440.jpg"
-										class="img-fluid lazy-image w-100" alt="Embroidered Textile" width="330"
-										height="440">
-								</a>
-								<div class="position-absolute product-flash z-index-2"><span
-										class="badge badge-product-flash on-sale bg-primary">-26%</span></div>
-								<div class="position-absolute d-flex z-index-2 product-actions horizontal">
-									<a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm add_to_cart"
-										href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-										data-bs-title="Add To Cart">
-										<svg class="icon icon-shopping-bag-open-light">
-											<use xlink:href="#icon-shopping-bag-open-light"></use>
-										</svg>
-									</a>
-									<a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm quick-view"
-										href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-										data-bs-title="Quick View">
-										<span data-bs-toggle="modal" data-bs-target="#quickViewModal"
-											class="d-flex align-items-center justify-content-center">
-											<svg class="icon icon-eye-light">
-												<use xlink:href="#icon-eye-light"></use>
-											</svg>
-										</span>
-									</a>
-									<a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm wishlist"
-										href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-										data-bs-title="Add To Wishlist">
-										<svg class="icon icon-star-light">
-											<use xlink:href="#icon-star-light"></use>
-										</svg>
-									</a>
-									<a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm compare"
-										href="<?= base_url('shop/compare') ?>" data-bs-toggle="tooltip" data-bs-placement="top"
-										data-bs-title="Compare">
-										<svg class="icon icon-arrows-left-right-light">
-											<use xlink:href="#icon-arrows-left-right-light"></use>
-										</svg>
-									</a>
-								</div>
-							</figure>
-							<div class="card-body text-center p-0">
-								<span class="d-flex align-items-center price text-body-emphasis fw-bold justify-content-center mb-3 fs-6">
-									<del class="text-body fw-500 me-4 fs-13px">$39.00</del>
-									<ins class="text-decoration-none">$29.00</ins>
-								</span>
-								<h4 class="product-title card-title text-primary-hover text-body-emphasis fs-15px fw-500 mb-3">
-									<a class="text-decoration-none text-reset" href="<?= base_url('shop/product-details') ?>">Embroidered Textile</a>
-								</h4>
-								<div class="d-flex align-items-center fs-12px justify-content-center">
-									<div class="rating">
-										<div class="empty-stars">
-											<span class="star"><svg class="icon star-o">
-													<use xlink:href="#star-o"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star-o">
-													<use xlink:href="#star-o"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star-o">
-													<use xlink:href="#star-o"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star-o">
-													<use xlink:href="#star-o"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star-o">
-													<use xlink:href="#star-o"></use>
-												</svg></span>
-										</div>
-										<div class="filled-stars" style="width: 80%">
-											<span class="star"><svg class="icon star text-primary">
-													<use xlink:href="#star"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star text-primary">
-													<use xlink:href="#star"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star text-primary">
-													<use xlink:href="#star"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star text-primary">
-													<use xlink:href="#star"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star text-primary">
-													<use xlink:href="#star"></use>
-												</svg></span>
-										</div>
-									</div>
-									<span class="reviews ms-4 pt-3 fs-14px">2947 reviews</span>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div data-animate="fadeInUp">
-						<div class="card card-product grid-1 bg-transparent border-0">
-							<figure class="card-img-top position-relative mb-7 overflow-hidden">
-								<a href="<?= base_url('shop/product-details') ?>" class="hover-zoom-in d-block"
-									title="Pottery Bowl">
-									<img src="#"
-										data-src="<?= base_url() ?>assets/landing/images/products/product-06-330x440.jpg"
-										class="img-fluid lazy-image w-100" alt="Pottery Bowl" width="330"
-										height="440">
-								</a>
-								<div class="position-absolute d-flex z-index-2 product-actions horizontal">
-									<a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm add_to_cart"
-										href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-										data-bs-title="Add To Cart">
-										<svg class="icon icon-shopping-bag-open-light">
-											<use xlink:href="#icon-shopping-bag-open-light"></use>
-										</svg>
-									</a>
-									<a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm quick-view"
-										href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-										data-bs-title="Quick View">
-										<span data-bs-toggle="modal" data-bs-target="#quickViewModal"
-											class="d-flex align-items-center justify-content-center">
-											<svg class="icon icon-eye-light">
-												<use xlink:href="#icon-eye-light"></use>
-											</svg>
-										</span>
-									</a>
-									<a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm wishlist"
-										href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-										data-bs-title="Add To Wishlist">
-										<svg class="icon icon-star-light">
-											<use xlink:href="#icon-star-light"></use>
-										</svg>
-									</a>
-									<a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm compare"
-										href="<?= base_url('shop/compare') ?>" data-bs-toggle="tooltip" data-bs-placement="top"
-										data-bs-title="Compare">
-										<svg class="icon icon-arrows-left-right-light">
-											<use xlink:href="#icon-arrows-left-right-light"></use>
-										</svg>
-									</a>
-								</div>
-							</figure>
-							<div class="card-body text-center p-0">
-								<span class="d-flex align-items-center price text-body-emphasis fw-bold justify-content-center mb-3 fs-6">$29.00</span>
-								<h4 class="product-title card-title text-primary-hover text-body-emphasis fs-15px fw-500 mb-3">
-									<a class="text-decoration-none text-reset" href="<?= base_url('shop/product-details') ?>">Pottery Bowl</a>
-								</h4>
-								<div class="d-flex align-items-center fs-12px justify-content-center">
-									<div class="rating">
-										<div class="empty-stars">
-											<span class="star"><svg class="icon star-o">
-													<use xlink:href="#star-o"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star-o">
-													<use xlink:href="#star-o"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star-o">
-													<use xlink:href="#star-o"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star-o">
-													<use xlink:href="#star-o"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star-o">
-													<use xlink:href="#star-o"></use>
-												</svg></span>
-										</div>
-										<div class="filled-stars" style="width: 100%">
-											<span class="star"><svg class="icon star text-primary">
-													<use xlink:href="#star"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star text-primary">
-													<use xlink:href="#star"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star text-primary">
-													<use xlink:href="#star"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star text-primary">
-													<use xlink:href="#star"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star text-primary">
-													<use xlink:href="#star"></use>
-												</svg></span>
-										</div>
-									</div>
-									<span class="reviews ms-4 pt-3 fs-14px">2947 reviews</span>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div data-animate="fadeInUp">
-						<div class="card card-product grid-1 bg-transparent border-0">
-							<figure class="card-img-top position-relative mb-7 overflow-hidden">
-								<a href="<?= base_url('shop/product-details') ?>" class="hover-zoom-in d-block"
-									title="Leather Wallet">
-									<img src="#"
-										data-src="<?= base_url() ?>assets/landing/images/products/product-07-330x440.jpg"
-										class="img-fluid lazy-image w-100" alt="Leather Wallet" width="330"
-										height="440">
-								</a>
-								<div class="position-absolute d-flex z-index-2 product-actions horizontal">
-									<a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm add_to_cart"
-										href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-										data-bs-title="Add To Cart">
-										<svg class="icon icon-shopping-bag-open-light">
-											<use xlink:href="#icon-shopping-bag-open-light"></use>
-										</svg>
-									</a>
-									<a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm quick-view"
-										href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-										data-bs-title="Quick View">
-										<span data-bs-toggle="modal" data-bs-target="#quickViewModal"
-											class="d-flex align-items-center justify-content-center">
-											<svg class="icon icon-eye-light">
-												<use xlink:href="#icon-eye-light"></use>
-											</svg>
-										</span>
-									</a>
-									<a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm wishlist"
-										href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-										data-bs-title="Add To Wishlist">
-										<svg class="icon icon-star-light">
-											<use xlink:href="#icon-star-light"></use>
-										</svg>
-									</a>
-									<a class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm compare"
-										href="<?= base_url('shop/compare') ?>" data-bs-toggle="tooltip" data-bs-placement="top"
-										data-bs-title="Compare">
-										<svg class="icon icon-arrows-left-right-light">
-											<use xlink:href="#icon-arrows-left-right-light"></use>
-										</svg>
-									</a>
-								</div>
-							</figure>
-							<div class="card-body text-center p-0">
-								<span class="d-flex align-items-center price text-body-emphasis fw-bold justify-content-center mb-3 fs-6">$29.00</span>
-								<h4 class="product-title card-title text-primary-hover text-body-emphasis fs-15px fw-500 mb-3">
-									<a class="text-decoration-none text-reset" href="<?= base_url('shop/product-details') ?>">Leather Wallet</a>
-								</h4>
-								<div class="d-flex align-items-center fs-12px justify-content-center">
-									<div class="rating">
-										<div class="empty-stars">
-											<span class="star"><svg class="icon star-o">
-													<use xlink:href="#star-o"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star-o">
-													<use xlink:href="#star-o"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star-o">
-													<use xlink:href="#star-o"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star-o">
-													<use xlink:href="#star-o"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star-o">
-													<use xlink:href="#star-o"></use>
-												</svg></span>
-										</div>
-										<div class="filled-stars" style="width: 100%">
-											<span class="star"><svg class="icon star text-primary">
-													<use xlink:href="#star"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star text-primary">
-													<use xlink:href="#star"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star text-primary">
-													<use xlink:href="#star"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star text-primary">
-													<use xlink:href="#star"></use>
-												</svg></span>
-											<span class="star"><svg class="icon star text-primary">
-													<use xlink:href="#star"></use>
-												</svg></span>
-										</div>
-									</div>
-									<span class="reviews ms-4 pt-3 fs-14px">2947 reviews</span>
-								</div>
-							</div>
-						</div>
-					</div>
+					<?php endforeach; ?>
 				</div>
+				<?php else: ?>
+				<div class="text-center py-10">
+					<p class="text-muted">No best sellers available at the moment.</p>
+					<a href="<?= base_url('shop') ?>" class="btn btn-primary mt-3">Browse All Products</a>
+				</div>
+				<?php endif; ?>
 			</div>
 		</div>
 	</section>
@@ -750,7 +187,7 @@
   <img 
     class="lazy-image dark-mode-img img-fluid" 
     src="#"
-    data-src="<?= base_url() ?>assets/landing/images/others/other-bg.jpg" 
+    data-src="<?= base_url() ?>assets/landing/images/others/other-bg-2.jpeg" 
     alt="new-collection"
     style="width:100%; height:100%; object-fit:cover; object-position:right center;">
 </div>
@@ -759,7 +196,7 @@
 		</div>
 	</section>
 
-	<section class="container container-xxl pt-15 pb-16 pb-lg-18 pt-lg-19">
+	<!-- <section class="container container-xxl pt-15 pb-16 pb-lg-18 pt-lg-19">
 		<div class="text-center" data-animate="fadeInUp">
 			<p class="fs-15px mb-6 ls-1 text-body-emphasis fw-semibold">SHOP BY CATEGORIES</p>
 			<h2 class="mb-6">Find Your Perfect Craft<br>Explore Our Categories</h2>
@@ -800,7 +237,7 @@
 				Shop All Crafts
 			</a>
 		</div>
-	</section>
+	</section> -->
 
 	<?php if (isset($settings['promo_section_active']) && $settings['promo_section_active'] == '1'): ?>
 	<section class="bg-section-3" data-animated-id="3">

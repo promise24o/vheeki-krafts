@@ -77,7 +77,7 @@
                       </div>
                     </div>
 
-                    <!-- Variants -->
+                     Variants 
                     <div class="card mt-4">
                       <div class="card-header">
                         <h6 class="mb-0">Product Variants</h6>

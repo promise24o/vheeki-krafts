@@ -31,7 +31,7 @@
               <h5 class="card-title fw-semibold mb-1">Paystack Configuration</h5>
               <p class="text-muted mb-0">Configure your Paystack payment gateway settings</p>
             </div>
-            <img src="https://paystack.com/assets/img/logo/logo.svg" alt="Paystack" style="height: 30px;">
+            <img src="https://assets.paystack.com/assets/img/hero/paystack-opengraph.png" alt="Paystack" style="height: 30px;">
           </div>
 
           <?php if ($this->session->flashdata('success')): ?>
@@ -131,9 +131,9 @@
               <label for="currency" class="form-label fw-semibold">Currency</label>
               <select class="form-select" id="currency" name="paystack_currency">
                 <option value="NGN" <?= (isset($settings['paystack_currency']) && $settings['paystack_currency'] == 'NGN') ? 'selected' : '' ?>>Nigerian Naira (NGN)</option>
-                <option value="USD" <?= (isset($settings['paystack_currency']) && $settings['paystack_currency'] == 'USD') ? 'selected' : '' ?>>US Dollar (USD)</option>
+                <!-- <option value="USD" <?= (isset($settings['paystack_currency']) && $settings['paystack_currency'] == 'USD') ? 'selected' : '' ?>>US Dollar (USD)</option>
                 <option value="GHS" <?= (isset($settings['paystack_currency']) && $settings['paystack_currency'] == 'GHS') ? 'selected' : '' ?>>Ghanaian Cedi (GHS)</option>
-                <option value="ZAR" <?= (isset($settings['paystack_currency']) && $settings['paystack_currency'] == 'ZAR') ? 'selected' : '' ?>>South African Rand (ZAR)</option>
+                <option value="ZAR" <?= (isset($settings['paystack_currency']) && $settings['paystack_currency'] == 'ZAR') ? 'selected' : '' ?>>South African Rand (ZAR)</option> -->
               </select>
             </div>
 

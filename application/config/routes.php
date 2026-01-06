@@ -54,6 +54,8 @@ $route['shop'] = 'Landing/shop';
 $route['about'] = 'Landing/about';
 $route['contact'] = 'Landing/contact';
 $route['reviews'] = 'Landing/reviews';
+$route['delivery'] = 'Landing/delivery';
+$route['privacy'] = 'Landing/privacy';
 $route['product/(:any)'] = 'Landing/product_detail/$1'; // Support both encrypted_id and slug
 
 // Cart routes

@@ -17,6 +17,7 @@ class Landing extends CI_Controller {
         $data['description'] = 'Explore unique drawings and paintings crafted with passion at Vheeki Krafts.';
         $data['banners'] = $this->crud_model->get_all_banners(true);
         $data['categories'] = $this->crud_model->get_random_categories_for_homepage(4);
+        $data['best_sellers'] = $this->crud_model->get_all_products(null, null, ['is_best_seller' => 1]);
         
         $this->load->view('Components/LandingHeader', $data);
         $this->load->view('Landing/Home', $data);
@@ -167,75 +168,171 @@ class Landing extends CI_Controller {
     
     public function checkout_process() {
         $this->output->set_content_type('application/json');
-        
-        $session_id = $this->session->userdata('session_id');
-        $cart_items = $this->crud_model->get_cart_items($session_id);
-        
-        if (empty($cart_items)) {
-            echo json_encode(['success' => false, 'message' => 'Cart is empty']);
-            return;
-        }
-        
-        $total = array_sum(array_column($cart_items, 'subtotal'));
-        
-        // Generate order number
-        $order_number = 'VK-' . time() . '-' . rand(1000, 9999);
-        
-        // Create order
-        $order_data = [
-            'order_number' => $order_number,
-            'customer_name' => $this->input->post('first_name') . ' ' . $this->input->post('last_name'),
-            'customer_email' => $this->input->post('email'),
-            'customer_phone' => $this->input->post('phone'),
-            'shipping_address' => $this->input->post('address') . ($this->input->post('address_2') ? ', ' . $this->input->post('address_2') : ''),
-            'city' => $this->input->post('city'),
-            'state' => $this->input->post('state'),
-            'postal_code' => $this->input->post('postal_code'),
-            'order_notes' => $this->input->post('order_notes'),
-            'total_amount' => $total,
-            'payment_method' => 'paystack',
-            'payment_status' => $this->input->post('payment_status') ?: 'pending',
-            'payment_reference' => $this->input->post('payment_reference'),
-            'order_status' => 'pending'
-        ];
-        
-        $order_id = $this->crud_model->create_order($order_data);
-        
-        if ($order_id) {
-            // Add order items
-            $order_items = [];
-            foreach ($cart_items as $item) {
-                $order_items[] = [
-                    'order_id' => $order_id,
-                    'product_id' => $item['product_id'],
-                    'product_name' => $item['product_name'],
-                    'product_sku' => $item['sku'],
-                    'size' => $item['size'] ?? null,
-                    'color' => $item['color'] ?? null,
-                    'quantity' => $item['quantity'],
-                    'unit_price' => $item['discount_price'] ?: $item['price'],
-                    'total_price' => $item['subtotal']
-                ];
+    
+        try {
+            // === Global Error Reporting ===
+            error_reporting(E_ALL);
+            ini_set('display_errors', 1);
+            ini_set('log_errors', 1);
+    
+            // === Debug Log Setup ===
+            $debug_log = APPPATH . 'logs/checkout_debug.log';
+            if (!file_exists(dirname($debug_log))) {
+                mkdir(dirname($debug_log), 0755, true);
             }
-            
-            $this->crud_model->add_order_items($order_items);
-            
-            // Add initial tracking log
-            $this->crud_model->add_tracking_log(
-                $order_id,
-                'pending',
-                'Order placed successfully. Awaiting confirmation.',
-                'System'
-            );
-            
-            // Clear cart
-            $this->crud_model->clear_cart($session_id);
-            
-            echo json_encode(['success' => true, 'order_id' => $order_id]);
-        } else {
-            echo json_encode(['success' => false, 'message' => 'Failed to create order']);
+            $log_debug = function ($message) use ($debug_log) {
+                $timestamp = date('[Y-m-d H:i:s] ');
+                file_put_contents($debug_log, $timestamp . $message . PHP_EOL, FILE_APPEND);
+            };
+            $log_debug('==============================');
+            $log_debug('--- Checkout Process Started ---');
+    
+            // === Basic Environment Check ===
+            $log_debug('Base URL: ' . base_url());
+            $log_debug('Controller: ' . get_class($this));
+            $log_debug('Session Library Loaded: ' . (isset($this->session) ? 'YES' : 'NO'));
+            $log_debug('CRUD Model Loaded: ' . (isset($this->crud_model) ? 'YES' : 'NO'));
+    
+            // === Session Check ===
+            $session_id = $this->session->userdata('session_id');
+            $log_debug('Session ID: ' . ($session_id ?: 'NULL'));
+            if (!$session_id) {
+                $log_debug('❌ Session expired or missing.');
+                echo json_encode(['success' => false, 'message' => 'Session expired. Please refresh the page.']);
+                return;
+            }
+    
+            // === Cart Check ===
+            $cart_items = $this->crud_model->get_cart_items($session_id);
+            $log_debug('Cart Items: ' . json_encode($cart_items));
+            if (empty($cart_items)) {
+                $log_debug('❌ Cart is empty.');
+                echo json_encode(['success' => false, 'message' => 'Cart is empty']);
+                return;
+            }
+    
+            $total = array_sum(array_column($cart_items, 'subtotal'));
+            $log_debug('Cart Total: ' . $total);
+    
+            // === Validate Required Fields ===
+            $required_fields = ['first_name', 'last_name', 'email', 'phone', 'address', 'city', 'state'];
+            foreach ($required_fields as $field) {
+                $value = $this->input->post($field);
+                $log_debug("Field check: {$field} = " . var_export($value, true));
+                if (empty($value)) {
+                    $log_debug("❌ Missing required field: {$field}");
+                    echo json_encode(['success' => false, 'message' => 'Missing required field: ' . $field]);
+                    return;
+                }
+            }
+    
+            // === Generate Order Number ===
+            $order_number = 'VK-' . date('Ymd') . '-' . strtoupper(substr(md5(time()), 0, 6));
+            $log_debug('Generated Order Number: ' . $order_number);
+    
+            // === Prepare Order Data ===
+            $order_data = [
+                'order_number' => $order_number,
+                'customer_name' => trim($this->input->post('first_name') . ' ' . $this->input->post('last_name')),
+                'customer_email' => $this->input->post('email'),
+                'customer_phone' => $this->input->post('phone'),
+                'shipping_address' => $this->input->post('address') . ($this->input->post('address_2') ? ', ' . $this->input->post('address_2') : ''),
+                'city' => $this->input->post('city'),
+                'state' => $this->input->post('state'),
+                'postal_code' => $this->input->post('postal_code') ?: '',
+                'order_notes' => $this->input->post('order_notes') ?: '',
+                'total_amount' => $total,
+                'payment_method' => 'paystack',
+                'payment_status' => $this->input->post('payment_status') ?: 'pending',
+                'payment_reference' => $this->input->post('payment_reference'),
+                'order_status' => 'pending'
+            ];
+    
+            $log_debug('Order Data Prepared: ' . json_encode($order_data));
+    
+            // === Create Order ===
+            $order_id = $this->crud_model->create_order($order_data);
+            $log_debug('Order Creation Result (order_id): ' . var_export($order_id, true));
+    
+            // === Check DB Error After Order Creation ===
+            $db_error = $this->db->error();
+            if (!empty($db_error['message'])) {
+                $log_debug('❌ DB ERROR (create_order): ' . json_encode($db_error));
+                echo json_encode(['success' => false, 'message' => 'Database error: ' . $db_error['message']]);
+                return;
+            }
+    
+            if ($order_id) {
+                // === Prepare Order Items ===
+                $order_items = [];
+                foreach ($cart_items as $item) {
+                    $order_items[] = [
+                        'order_id' => $order_id,
+                        'product_id' => $item['product_id'],
+                        'quantity' => $item['quantity'],
+                        'price' => $item['discount_price'] ?: $item['price'],
+                        'subtotal' => $item['subtotal']
+                    ];
+                }
+                $log_debug('Order Items Prepared: ' . json_encode($order_items));
+    
+                // === Add Order Items ===
+                if (!empty($order_items)) {
+                    $log_debug('Attempting to add order items...');
+                    $this->crud_model->add_order_items($order_items);
+                    $log_debug('Order items inserted.');
+    
+                    $db_error = $this->db->error();
+                    if (!empty($db_error['message'])) {
+                        $log_debug('❌ DB ERROR (add_order_items): ' . json_encode($db_error));
+                        echo json_encode(['success' => false, 'message' => 'DB error on order items: ' . $db_error['message']]);
+                        return;
+                    }
+                }
+    
+                // === Add Tracking Log ===
+                $log_debug('Attempting to add tracking log...');
+                $this->crud_model->add_tracking_log(
+                    $order_id,
+                    'pending',
+                    'Order placed successfully. Payment reference: ' . $this->input->post('payment_reference'),
+                    'System'
+                );
+                $log_debug('Tracking log added.');
+    
+                $db_error = $this->db->error();
+                if (!empty($db_error['message'])) {
+                    $log_debug('❌ DB ERROR (add_tracking_log): ' . json_encode($db_error));
+                    echo json_encode(['success' => false, 'message' => 'DB error on tracking log: ' . $db_error['message']]);
+                    return;
+                }
+    
+                // === Clear Cart ===
+                $log_debug('Clearing cart for session: ' . $session_id);
+                $this->crud_model->clear_cart($session_id);
+                $log_debug('Cart cleared.');
+    
+                // === Save customer email to session ===
+                $this->session->set_userdata('customer_email', $this->input->post('email'));
+                $log_debug('Customer email saved to session.');
+    
+                $log_debug('✅ Checkout process completed successfully.');
+                echo json_encode([
+                    'success' => true,
+                    'order_id' => $order_id,
+                    'order_number' => $order_number
+                ]);
+            } else {
+                $log_debug('❌ Failed to create order (no order_id returned).');
+                echo json_encode(['success' => false, 'message' => 'Failed to create order. Please try again.']);
+            }
+        } catch (Throwable $e) { // catch both Exception and Error
+            $error_message = '❌ Checkout process error: ' . $e->getMessage() . ' | File: ' . $e->getFile() . ' | Line: ' . $e->getLine();
+            file_put_contents($debug_log, date('[Y-m-d H:i:s] ') . $error_message . PHP_EOL, FILE_APPEND);
+            echo json_encode(['success' => false, 'message' => $error_message]);
         }
-    }
+    }   
+    
     
     // ORDERS
     public function orders() {
@@ -389,6 +486,24 @@ class Landing extends CI_Controller {
         
         $this->load->view('Components/LandingHeader', $data);
         $this->load->view('Landing/ProductDetail', $data);
+        $this->load->view('Components/LandingFooter', $data);
+    }
+    
+    public function delivery() {
+        $data = $this->get_base_data();
+        $data['title'] = 'Delivery Information';
+        $data['description'] = 'Learn about our shipping and delivery process at Vheeki Krafts.';
+        $this->load->view('Components/LandingHeader', $data);
+        $this->load->view('Landing/Delivery', $data);
+        $this->load->view('Components/LandingFooter', $data);
+    }
+    
+    public function privacy() {
+        $data = $this->get_base_data();
+        $data['title'] = 'Privacy Policy';
+        $data['description'] = 'Read our privacy policy to understand how we protect your personal information.';
+        $this->load->view('Components/LandingHeader', $data);
+        $this->load->view('Landing/Privacy', $data);
         $this->load->view('Components/LandingFooter', $data);
     }
 }

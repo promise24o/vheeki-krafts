@@ -21,7 +21,7 @@
                 </div>
               <?php endif; ?>
 
-              <form action="<?= base_url('admin/edit_product/' . $product['product_id']) ?>" method="post" enctype="multipart/form-data">
+              <form action="<?= base_url('admin/edit_product/' . $product['encrypted_id']) ?>" method="post" enctype="multipart/form-data">
                 <div class="row">
                   <!-- Basic Information -->
                   <div class="col-lg-8">
@@ -161,6 +161,7 @@
                         </div>
                       </div>
                     </div>
+                    
                   </div>
 
                   <!-- Sidebar -->

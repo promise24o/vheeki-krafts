@@ -35,8 +35,8 @@
 							<?php if (count($product_images) > 1): ?>
 								<div id="vertical-slider-slides" class="slick-slider slick-slider-arrow-inside slick-slider-dots-inside slick-slider-dots-light g-0" data-slick-options='{"arrows":true,"asNavFor":"#vertical-slider-thumb","dots":true,"slidesToShow":1,"vertical":false}'>
 									<?php foreach ($product_images as $image): ?>
-										<a href="<?= base_url($image['image_path']) ?>" data-gallery="product-gallery">
-											<img src="<?= base_url($image['image_path']) ?>" 
+										<a href="<?= ($image['image_path']) ?>" data-gallery="product-gallery">
+											<img src="<?= ($image['image_path']) ?>" 
 											     width="540" 
 											     height="720" 
 											     title="<?= htmlspecialchars($product['product_name']) ?>" 
@@ -47,13 +47,13 @@
 									<?php endforeach; ?>
 								</div>
 							<?php else: ?>
-								<img src="<?= base_url($product_images[0]['image_path']) ?>" 
+								<img src="<?= ($product_images[0]['image_path']) ?>" 
 								     class="w-100 h-auto" 
 								     alt="<?= htmlspecialchars($product['product_name']) ?>"
 								     style="object-fit: cover; max-height: 720px;">
 							<?php endif; ?>
 						<?php else: ?>
-							<img src="<?= base_url('assets/admin/images/placeholder.png') ?>" 
+							<img src="https://plus.unsplash.com/premium_photo-1705262413765-5fe7a310d4e6" 
 							     class="w-100 h-auto" 
 							     alt="No image available"
 							     style="object-fit: cover; max-height: 720px;">
@@ -131,6 +131,63 @@
 				
 				<form class="product-info-custom" id="addToCartForm">
 					<input type="hidden" name="product_id" value="<?= $product['product_id'] ?>">
+					<input type="hidden" name="selected_size" id="selected_size" value="">
+					<input type="hidden" name="selected_color" id="selected_color" value="">
+					<input type="hidden" name="selected_tags" id="selected_tags" value="">
+					
+					<?php if (!empty($product['sizes'])): ?>
+						<?php $sizes = json_decode($product['sizes'], true); ?>
+						<?php if (!empty($sizes) && is_array($sizes)): ?>
+						<div class="form-group mb-4">
+							<label class="fw-semibold text-body-emphasis mb-2">Available Sizes:</label>
+							<div class="d-flex flex-wrap gap-2">
+								<?php foreach ($sizes as $size): ?>
+									<?php if (!empty(trim($size))): ?>
+									<button type="button" class="btn btn-outline-secondary size-option" data-size="<?= htmlspecialchars(trim($size)) ?>">
+										<?= htmlspecialchars(trim($size)) ?>
+									</button>
+									<?php endif; ?>
+								<?php endforeach; ?>
+							</div>
+						</div>
+						<?php endif; ?>
+					<?php endif; ?>
+					
+					<?php if (!empty($product['colors'])): ?>
+						<?php $colors = json_decode($product['colors'], true); ?>
+						<?php if (!empty($colors) && is_array($colors)): ?>
+						<div class="form-group mb-4">
+							<label class="fw-semibold text-body-emphasis mb-2">Available Colors:</label>
+							<div class="d-flex flex-wrap gap-2">
+								<?php foreach ($colors as $color): ?>
+									<?php if (!empty(trim($color))): ?>
+									<button type="button" class="btn btn-outline-secondary color-option" data-color="<?= htmlspecialchars(trim($color)) ?>">
+										<?= htmlspecialchars(trim($color)) ?>
+									</button>
+									<?php endif; ?>
+								<?php endforeach; ?>
+							</div>
+						</div>
+						<?php endif; ?>
+					<?php endif; ?>
+					
+					<?php if (!empty($product['tags'])): ?>
+						<?php $tags = json_decode($product['tags'], true); ?>
+						<?php if (!empty($tags) && is_array($tags)): ?>
+						<div class="form-group mb-4">
+							<label class="fw-semibold text-body-emphasis mb-2">Tags:</label>
+							<div class="d-flex flex-wrap gap-2">
+								<?php foreach ($tags as $tag): ?>
+									<?php if (!empty(trim($tag))): ?>
+									<span class="badge bg-secondary fs-6 px-3 py-2">
+										<?= htmlspecialchars(trim($tag)) ?>
+									</span>
+									<?php endif; ?>
+								<?php endforeach; ?>
+							</div>
+						</div>
+						<?php endif; ?>
+					<?php endif; ?>
 					
 					<div class="form-group mb-4">
 						<label class="fw-semibold text-body-emphasis mb-2">Quantity:</label>
@@ -185,7 +242,7 @@
 			</div>
 		</div>
 	</section>
-	<div class="border-top w-100"></div>
+ <div class="border-top w-100"></div>
 	<section class="container pt-15 pb-12 pt-lg-17 pb-lg-20">
 		<div class="collapse-tabs">
 			<ul class="nav nav-tabs border-0 justify-content-center pb-12 d-none d-md-flex" id="productTabs" role="tablist">
@@ -209,24 +266,22 @@
 								</h5>
 							</div>
 							<div class="collapse show border-md-0 border p-md-0 p-6" id="collapse-product-detail">
-								<div class="row">
-									<div class="col-12 col-lg-6 pe-lg-10 pe-xl-20">
-										<img src="#" data-src="/assets/images/shop/product-details-img.jpg" class="w-100 lazy-image" alt="" width="470" height="540">
+								<?php if (!empty($product['story'])): ?>
+									<div class="row">
+										<!--<?php if (!empty($product_images)): ?>-->
+										<!--	<div class="col-12 col-lg-6 pe-lg-10 pe-xl-20">-->
+										<!--		<img src="<?= base_url($product_images[0]['image_path']) ?>" class="w-100 rounded" alt="<?= htmlspecialchars($product['product_name']) ?>" width="470" height="540" style="object-fit: cover;">-->
+										<!--	</div>-->
+										<!--<?php endif; ?>-->
+										<div class="pb-3 <?= !empty($product_images) ? 'col-12 col-lg-6 pt-12 pt-lg-0' : 'col-12' ?>">
+											<?= nl2br(htmlspecialchars($product['story'])) ?>
+										</div>
 									</div>
-									<div class="pb-3 col-12 col-lg-6 pt-12 pt-lg-0">
-										<p class="fw-semibold text-body-emphasis mb-2 pb-4">For Art Lovers & Interior Decorators</p>
-										<p class="mb-2 pb-4">Handcrafted canvas artwork created with premium materials and artistic vision. Each piece is unique and adds character to any living space.</p>
-										<p class="mb-9">Transform your home with this beautiful handcrafted canvas art. Made with high-quality materials and attention to detail, this piece brings warmth and personality to any room. Perfect for modern and traditional interiors alike.</p>
-										<p class="fw-semibold text-body-emphasis mb-2 pb-4">Features</p>
-										<ul class="mb-7 ps-6">
-											<li class="mb-1">High-quality canvas material</li>
-											<li class="mb-1">Handcrafted with attention to detail</li>
-											<li class="mb-1">Ready to hang</li>
-											<li class="mb-1">Unique artistic design</li>
-											<li>Available in multiple sizes</li>
-										</ul>
+								<?php else: ?>
+									<div class="text-center py-8">
+										<p class="text-muted">No product details available.</p>
 									</div>
-								</div>
+								<?php endif; ?>
 							</div>
 						</div>
 					</div>
@@ -238,55 +293,35 @@
 								</h5>
 							</div>
 							<div class="collapse border-md-0 border p-md-0 p-6" id="collapse-care">
-								<div class="pb-3">
-									<p class="fw-semibold text-body-emphasis mb-2 pb-4">Follow these care guidelines to maintain your artwork:</p>
-									<ul class="ps-6 mb-8">
-										<li class="mb-3">Keep away from direct sunlight to prevent fading</li>
-										<li class="mb-3">Dust gently with a soft, dry cloth</li>
-										<li class="mb-3">Avoid exposure to moisture and humidity</li>
-										<li class="mb-3">Handle with clean, dry hands</li>
-										<li class="mb-3">Store in a cool, dry place if not displayed</li>
-										<li>Frame or mount properly to prevent damage</li>
-									</ul>
-								</div>
+								<?php if (!empty($product['care_instructions'])): ?>
+									<div class="pb-3">
+										<?= nl2br(htmlspecialchars($product['care_instructions'])) ?>
+									</div>
+								<?php else: ?>
+									<div class="text-center py-8">
+										<p class="text-muted">No care instructions available for this product.</p>
+									</div>
+								<?php endif; ?>
 							</div>
 						</div>
 					</div>
 					<div class="tab-pane fade" id="materials" role="tabpanel" aria-labelledby="materials-tab" tabindex="0">
-						<div class="card-header border-0 bg-transparent px-0 py-4 product-tabs-mobile d-block d-md-none">
-							<h5 class="mb-0">
-								<button class="btn lh-2 fs-5 py-3 px-6 shadow-none w-100 border text-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-materials" aria-expanded="false" aria-controls="collapse-materials">Materials</button>
-							</h5>
-						</div>
-						<div class="collapse border-md-0 border p-md-0 p-6" id="collapse-materials">
-							<div class="pb-3">
-								<div class="table-responsive mb-5">
-									<table class="table table-borderless mb-0">
-										<tbody>
-											<tr>
-												<td class="ps-0 py-5 pe-5 text-body-emphasis">Canvas</td>
-												<td class="text-end py-5 ps-5 pe-0">100% Cotton Canvas</td>
-											</tr>
-											<tr>
-												<td class="ps-0 py-5 pe-5 text-body-emphasis">Paint</td>
-												<td class="text-end py-5 ps-5 pe-0">Acrylic Paint</td>
-											</tr>
-											<tr>
-												<td class="ps-0 py-5 pe-5 text-body-emphasis">Frame</td>
-												<td class="text-end py-5 ps-5 pe-0">Wooden Frame (Optional)</td>
-											</tr>
-											<tr>
-												<td class="ps-0 py-5 pe-5 text-body-emphasis">Finish</td>
-												<td class="text-end py-5 ps-5 pe-0">Protective Varnish</td>
-											</tr>
-											<tr>
-												<td class="ps-0 py-5 pe-5 text-body-emphasis">Dimensions</td>
-												<td class="text-end py-5 ps-5 pe-0">16x20 inches / 24x36 inches</td>
-											</tr>
-										</tbody>
-									</table>
-								</div>
-								<p class="mb-0">Perfect for art enthusiasts and interior decorators. Each piece is handcrafted with premium materials ensuring durability and artistic quality. Our canvas artworks are designed to be conversation starters and focal points in any room.</p>
+						<div class="card border-0 bg-transparent">
+							<div class="card-header border-0 bg-transparent px-0 py-4 product-tabs-mobile d-block d-md-none">
+								<h5 class="mb-0">
+									<button class="btn lh-2 fs-5 py-3 px-6 shadow-none w-100 border text-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-materials" aria-expanded="false" aria-controls="collapse-materials">Materials</button>
+								</h5>
+							</div>
+							<div class="collapse border-md-0 border p-md-0 p-6" id="collapse-materials">
+								<?php if (!empty($product['materials'])): ?>
+									<div class="pb-3">
+										<?= nl2br(htmlspecialchars($product['materials'])) ?>
+									</div>
+								<?php else: ?>
+									<div class="text-center py-8">
+										<p class="text-muted">No materials information available for this product.</p>
+									</div>
+								<?php endif; ?>
 							</div>
 						</div>
 					</div>
@@ -297,98 +332,85 @@
 </main>
 
 <script>
-// Product data for sharing
 const productData = {
 	name: <?= json_encode($product['product_name']) ?>,
 	url: window.location.href,
 	price: '₦<?= number_format($product['discount_price'] ?: $product['price'], 2) ?>',
-	description: <?= json_encode(substr($product['description'], 0, 200)) ?>
+	description: <?= json_encode(substr($product['description'], 0, 200)) ?>,
+	image: <?= json_encode(!empty($product_images) ? ($product_images[0]['image_path']) : "https://plus.unsplash.com/premium_photo-1705262413765-5fe7a310d4e6") ?>
 };
 
-// Quantity controls
-document.getElementById('decreaseQty').addEventListener('click', function() {
-	const qtyInput = document.getElementById('quantity');
-	let qty = parseInt(qtyInput.value);
-	if (qty > 1) {
-		qtyInput.value = qty - 1;
-	}
-});
-
-document.getElementById('increaseQty').addEventListener('click', function() {
-	const qtyInput = document.getElementById('quantity');
-	let qty = parseInt(qtyInput.value);
-	const max = parseInt(qtyInput.max);
-	if (qty < max) {
-		qtyInput.value = qty + 1;
-	}
-});
-
-// Add to cart
-document.getElementById('addToCartForm').addEventListener('submit', function(e) {
-	e.preventDefault();
+document.addEventListener('DOMContentLoaded', function() {
+	const sizeButtons = document.querySelectorAll('.size-option');
+	const colorButtons = document.querySelectorAll('.color-option');
+	const selectedSizeInput = document.getElementById('selected_size');
+	const selectedColorInput = document.getElementById('selected_color');
 	
-	const formData = new FormData(this);
-	const submitBtn = this.querySelector('button[type="submit"]');
-	const originalText = submitBtn.innerHTML;
+	sizeButtons.forEach(button => {
+		button.addEventListener('click', function() {
+			sizeButtons.forEach(btn => btn.classList.remove('active', 'btn-dark'));
+			sizeButtons.forEach(btn => btn.classList.add('btn-outline-secondary'));
+			
+			this.classList.remove('btn-outline-secondary');
+			this.classList.add('active', 'btn-dark');
+			
+			selectedSizeInput.value = this.getAttribute('data-size');
+		});
+	});
 	
-	submitBtn.disabled = true;
-	submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Adding...';
+	colorButtons.forEach(button => {
+		button.addEventListener('click', function() {
+			colorButtons.forEach(btn => btn.classList.remove('active', 'btn-dark'));
+			colorButtons.forEach(btn => btn.classList.add('btn-outline-secondary'));
+			
+			this.classList.remove('btn-outline-secondary');
+			this.classList.add('active', 'btn-dark');
+			
+			selectedColorInput.value = this.getAttribute('data-color');
+		});
+	});
 	
-	fetch('<?= base_url("cart/add") ?>', {
-		method: 'POST',
-		body: formData
-	})
-	.then(response => response.json())
-	.then(data => {
-		if (data.success) {
-			// Show success message
-			if (typeof toastr !== 'undefined') {
-				toastr.success('Product added to cart!');
-			} else {
-				alert('Product added to cart!');
+	const addToCartForm = document.getElementById('addToCartForm');
+	if (addToCartForm) {
+		addToCartForm.addEventListener('submit', function(e) {
+			const hasSizes = sizeButtons.length > 0;
+			const hasColors = colorButtons.length > 0;
+			
+			if (hasSizes && !selectedSizeInput.value) {
+				e.preventDefault();
+				if (typeof toastr !== 'undefined') {
+					toastr.warning('Please select a size');
+				} else {
+					alert('Please select a size');
+				}
+				return false;
 			}
 			
-			// Update cart count
-			const cartCount = document.getElementById('cartCount');
-			const sideCartCount = document.getElementById('sideCartCount');
-			if (cartCount) {
-				cartCount.textContent = data.cart_count;
+			if (hasColors && !selectedColorInput.value) {
+				e.preventDefault();
+				if (typeof toastr !== 'undefined') {
+					toastr.warning('Please select a color');
+				} else {
+					alert('Please select a color');
+				}
+				return false;
 			}
-			if (sideCartCount) {
-				sideCartCount.textContent = data.cart_count;
-			}
-		} else {
-			if (typeof toastr !== 'undefined') {
-				toastr.error(data.message || 'Failed to add product to cart');
-			} else {
-				alert(data.message || 'Failed to add product to cart');
-			}
-		}
-	})
-	.catch(error => {
-		console.error('Error:', error);
-		if (typeof toastr !== 'undefined') {
-			toastr.error('An error occurred');
-		} else {
-			alert('An error occurred');
-		}
-	})
-	.finally(() => {
-		submitBtn.disabled = false;
-		submitBtn.innerHTML = originalText;
-	});
+		});
+	}
 });
 
-// Social sharing functions
 function shareOnFacebook() {
 	const url = encodeURIComponent(productData.url);
-	window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank', 'width=600,height=400');
+	const img = encodeURIComponent(productData.image);
+	const title = encodeURIComponent(productData.name);
+	window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&picture=${img}&title=${title}`, '_blank', 'width=600,height=400');
 }
 
 function shareOnTwitter() {
 	const text = encodeURIComponent(`Check out ${productData.name} - ${productData.price}`);
 	const url = encodeURIComponent(productData.url);
-	window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank', 'width=600,height=400');
+	const img = encodeURIComponent(productData.image);
+	window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}&image=${img}`, '_blank', 'width=600,height=400');
 }
 
 function shareOnWhatsApp() {
@@ -398,26 +420,20 @@ function shareOnWhatsApp() {
 
 function copyProductLink() {
 	navigator.clipboard.writeText(productData.url).then(() => {
-		if (typeof toastr !== 'undefined') {
-			toastr.success('Product link copied to clipboard!');
-		} else {
-			alert('Product link copied to clipboard!');
-		}
+		if (typeof toastr !== 'undefined') toastr.success('Product link copied to clipboard!');
+		else alert('Product link copied to clipboard!');
 	}).catch(err => {
-		console.error('Failed to copy:', err);
-		// Fallback method
 		const tempInput = document.createElement('input');
 		tempInput.value = productData.url;
 		document.body.appendChild(tempInput);
 		tempInput.select();
 		document.execCommand('copy');
 		document.body.removeChild(tempInput);
-		
-		if (typeof toastr !== 'undefined') {
-			toastr.success('Product link copied to clipboard!');
-		} else {
-			alert('Product link copied to clipboard!');
-		}
+		if (typeof toastr !== 'undefined') toastr.success('Product link copied to clipboard!');
+		else alert('Product link copied to clipboard!');
 	});
 }
 </script>
+
+
+

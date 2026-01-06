@@ -76,7 +76,7 @@
                   <?php foreach ($products as $product): ?>
                     <tr>
                       <td>
-                        <img src="<?= base_url('uploads/products/thumb_' . $product['product_id'] . '.jpg') ?>" 
+                        <img src="<?= $product['main_image']?>" 
                              alt="<?= htmlspecialchars($product['product_name']) ?>" 
                              width="50" height="50" class="rounded"
                              onerror="this.src='<?= base_url('assets/admin/images/placeholder.png') ?>'">

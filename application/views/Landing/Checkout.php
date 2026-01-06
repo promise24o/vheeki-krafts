@@ -235,6 +235,7 @@ document.getElementById('checkoutForm')?.addEventListener('submit', function(e) 
 			})
 			.then(response => response.json())
 			.then(data => {
+				console.log(data);
 				if (data.success) {
 					window.location.href = '<?= base_url("order/success/") ?>' + data.order_id;
 				} else {

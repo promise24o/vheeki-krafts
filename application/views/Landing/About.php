@@ -66,49 +66,59 @@
         </div>
     </section>
     <section>
-        <div class="container container-xxl mb-11">
-            <div class="text-center pb-11 pb-lg-14">
-                <h2 class="fs-3 w-lg-40 w-auto mx-auto pb-7">Transforming Moments into Timeless Art</h2>
-                <p class="mw-lg-50 mx-auto">Whether you're decorating a home, office, or gallery, our goal is to inspire and remind you that beauty lives in every captured moment. Each piece is designed to evoke emotion and add character to your space.</p>
-            </div>
-            <div class="row gy-30px">
-                <div class="col-md-4">
-                    <div class="">
-                        <!-- <div class="d-flex justify-content-center">
-                            <img class="lazy-image img-fluid light-mode-img" src="#" data-src="<?= base_url() ?>assets/landing/images/image-box/image-box-11.png" width="102" height="118" alt="Carefully Composed">
-                            <img class="lazy-image dark-mode-img img-fluid" src="#" data-src="<?= base_url() ?>assets/landing/images/image-box/image-box-white-11.png" width="102" height="118" alt="Carefully Composed">
-                        </div> -->
-                        <div class="card-body text-center pt-7 mt-3">
-                            <h3 class="fs-4 mb-6">Carefully Composed</h3>
-                            <p class="mb-0 px-lg-6">Every photograph is meticulously framed and composed to capture the perfect balance of light, color, and emotion</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="">
-                        <!-- <div class="d-flex justify-content-center">
-                            <img class="lazy-image img-fluid light-mode-img" src="#" data-src="<?= base_url() ?>assets/landing/images/image-box/image-box-02.png" width="102" height="118" alt="Expertly Color-Graded">
-                            <img class="lazy-image dark-mode-img img-fluid" src="#" data-src="<?= base_url() ?>assets/landing/images/image-box/image-box-white-02.png" width="102" height="118" alt="Expertly Color-Graded">
-                        </div> -->
-                        <div class="card-body text-center pt-7 mt-3">
-                            <h3 class="fs-4 mb-6">Expertly Color-Graded</h3>
-                            <p class="mb-0 px-lg-6">Each image is refined with professional color grading to enhance mood, depth, and visual storytelling</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="">
-                        <!-- <div class="d-flex justify-content-center">
-                            <img class="lazy-image img-fluid light-mode-img" src="#" data-src="<?= base_url() ?>assets/landing/images/image-box/image-box-03.png" width="102" height="118" alt="Crafted with Passion">
-                            <img class="lazy-image dark-mode-img img-fluid" src="#" data-src="<?= base_url() ?>assets/landing/images/image-box/image-box-white-03.png" width="102" height="118" alt="Crafted with Passion">
-                        </div> -->
-                        <div class="card-body text-center pt-7 mt-3">
-                            <h3 class="fs-4 mb-6">Crafted with Passion</h3>
-                            <p class="mb-0 px-lg-6">Every piece is created with attention to detail, creativity, and a passion for visual storytelling that speaks to the soul</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  <div class="container container-xxl mb-11">
+    <div class="text-center pb-11 pb-lg-14">
+      <h2 class="fs-3 w-lg-40 w-auto mx-auto pb-7">Transforming Moments into Timeless Art</h2>
+      <p class="mw-lg-50 mx-auto">
+        Whether you're decorating a home, office, or gallery, our goal is to inspire and remind you that beauty lives in every captured moment. 
+        Each piece is designed to evoke emotion and add character to your space.
+      </p>
+    </div>
+
+    <div class="row gy-30px">
+      <div class="col-md-4">
+        <div class="text-center">
+          <div class="icon mb-4">
+            <i class="bi bi-aspect-ratio fs-1 text-primary"></i>
+          </div>
+          <div class="card-body pt-3">
+            <h3 class="fs-4 mb-3">Carefully Composed</h3>
+            <p class="mb-0 px-lg-6">
+              Every photograph is meticulously framed and composed to capture the perfect balance of light, color, and emotion.
+            </p>
+          </div>
         </div>
-    </section>
+      </div>
+
+      <div class="col-md-4">
+        <div class="text-center">
+          <div class="icon mb-4">
+            <i class="bi bi-palette fs-1 text-primary"></i>
+          </div>
+          <div class="card-body pt-3">
+            <h3 class="fs-4 mb-3">Expertly Color-Graded</h3>
+            <p class="mb-0 px-lg-6">
+              Each image is refined with professional color grading to enhance mood, depth, and visual storytelling.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="text-center">
+          <div class="icon mb-4">
+            <i class="bi bi-heart-fill fs-1 text-primary"></i>
+          </div>
+          <div class="card-body pt-3">
+            <h3 class="fs-4 mb-3">Crafted with Passion</h3>
+            <p class="mb-0 px-lg-6">
+              Every piece is created with attention to detail, creativity, and a passion for visual storytelling that speaks to the soul.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 </main>

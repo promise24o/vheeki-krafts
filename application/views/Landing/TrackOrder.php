@@ -108,7 +108,7 @@
                                                         <div class="fw-semibold"><?= htmlspecialchars($item['product_name']) ?></div>
                                                         <small class="text-muted">Qty: <?= $item['quantity'] ?></small>
                                                     </td>
-                                                    <td class="text-end">₦<?= number_format($item['total_price'], 2) ?></td>
+                                                    <td class="text-end">₦<?= number_format($item['subtotal'] ?? 0, 2) ?></td>
                                                 </tr>
                                             <?php endforeach; ?>
                                         </tbody>

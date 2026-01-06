@@ -62,7 +62,7 @@
                 <?php foreach ($banners as $banner): ?>
                   <tr>
                     <td>
-                      <img src="<?= base_url('uploads/banners/' . $banner['background_image']) ?>" 
+                      <img src="<?= base_url('uploads/banners/' . $banner['banner_id'].'.jpg') ?>" 
                            alt="Banner" 
                            class="rounded" 
                            style="width: 120px; height: 60px; object-fit: cover;">

@@ -59,122 +59,292 @@ class Admin  extends CI_Controller
 		$this->load->view('Components/AdminFooter');
 	}
 
-	public function add_product()
-	{
-		if ($this->session->userdata('admin_login') != TRUE)
-			redirect(base_url(), 'refresh');
+// 	public function add_product()
+// 	{
+// 		if ($this->session->userdata('admin_login') != TRUE)
+// 			redirect(base_url(), 'refresh');
 
-		if ($this->input->post()) {
-			$product_name = $this->input->post('product_name');
-			$product_slug = $this->crud_model->generate_slug($product_name);
-			$sku = $this->crud_model->generate_sku($product_name);
+// 		if ($this->input->post()) {
+// 			$product_name = $this->input->post('product_name');
+// 			$product_slug = $this->crud_model->generate_slug($product_name);
+// 			$sku = $this->crud_model->generate_sku($product_name);
 			
-			// Generate unique encrypted ID (long unique identifier)
-			$encrypted_id = $this->generate_encrypted_id();
+// 			// Generate unique encrypted ID (long unique identifier)
+// 			$encrypted_id = $this->generate_encrypted_id();
 
-			$data = array(
-				'product_name' => $product_name,
-				'product_slug' => $product_slug,
-				'sku' => $sku,
-				'encrypted_id' => $encrypted_id,
-				'category_id' => $this->input->post('category_id'),
-				'price' => $this->input->post('price'),
-				'discount_price' => $this->input->post('discount_price') ?: null,
-				'description' => $this->input->post('description'),
-				'care_instructions' => $this->input->post('care_instructions'),
-				'materials' => $this->input->post('materials'),
-				'story' => $this->input->post('story'),
-				'sizes' => json_encode($this->input->post('sizes') ?: []),
-				'colors' => json_encode($this->input->post('colors') ?: []),
-				'tags' => json_encode($this->input->post('tags') ?: []),
-				'stock_quantity' => $this->input->post('stock_quantity'),
-				'is_best_seller' => $this->input->post('is_best_seller') ? 1 : 0,
-				'is_new_arrival' => $this->input->post('is_new_arrival') ? 1 : 0,
-				'is_on_sale' => $this->input->post('is_on_sale') ? 1 : 0,
-				'is_hot_item' => $this->input->post('is_hot_item') ? 1 : 0,
-				'is_active' => 1
-			);
+// 			$data = array(
+// 				'product_name' => $product_name,
+// 				'product_slug' => $product_slug,
+// 				'sku' => $sku,
+// 				'encrypted_id' => $encrypted_id,
+// 				'category_id' => $this->input->post('category_id'),
+// 				'price' => $this->input->post('price'),
+// 				'discount_price' => $this->input->post('discount_price') ?: null,
+// 				'description' => $this->input->post('description'),
+// 				'care_instructions' => $this->input->post('care_instructions'),
+// 				'materials' => $this->input->post('materials'),
+// 				'story' => $this->input->post('story'),
+// 				'sizes' => json_encode($this->input->post('sizes') ?: []),
+// 				'colors' => json_encode($this->input->post('colors') ?: []),
+// 				'tags' => json_encode($this->input->post('tags') ?: []),
+// 				'stock_quantity' => $this->input->post('stock_quantity'),
+// 				'is_best_seller' => $this->input->post('is_best_seller') ? 1 : 0,
+// 				'is_new_arrival' => $this->input->post('is_new_arrival') ? 1 : 0,
+// 				'is_on_sale' => $this->input->post('is_on_sale') ? 1 : 0,
+// 				'is_hot_item' => $this->input->post('is_hot_item') ? 1 : 0,
+// 				'is_active' => 1
+// 			);
 
-			$product_id = $this->crud_model->add_product($data);
+// 			$product_id = $this->crud_model->add_product($data);
 			
-			if ($product_id) {
-				// Generate QR code for the product
-				$this->load->library('qr_code');
-				$product_url = base_url('product/' . $encrypted_id);
-				$qr_filename = 'product_' . $encrypted_id;
-				$qr_code_path = $this->qr_code->generate($product_url, $qr_filename, 400);
+// 			if ($product_id) {
+// 				// Generate QR code for the product
+// 				$this->load->library('ciqrcode');
+// 				$product_url = base_url('product/' . $product_slug);
+// 				$qr_filename = 'product_' . $product_slug . '.png';
 				
-				if ($qr_code_path) {
-					// Update product with QR code path
-					$this->crud_model->update_product($product_id, ['qr_code' => $qr_code_path]);
-				}
+// 				$params['data'] = $product_url;
+// 				$params['level'] = 'H';
+// 				$params['size'] = 10;
+// 				$params['savename'] = FCPATH . 'uploads/qrcodes/' . $qr_filename;
 				
-				$this->session->set_flashdata('success', 'Product added successfully with QR code!');
-			} else {
-				$this->session->set_flashdata('error', 'Failed to add product.');
-			}
-			redirect('admin/products');
-		}
+// 				if ($this->ciqrcode->generate($params)) {
+// 					// Update product with QR code path
+// 					$this->crud_model->update_product($product_id, ['qr_code' => $qr_filename]);
+// 				}
+				
+// 				$this->session->set_flashdata('success', 'Product added successfully with QR code!');
+// 			} else {
+// 				$this->session->set_flashdata('error', 'Failed to add product.');
+// 			}
+// 			redirect('admin/products');
+// 		}
 
-		$data['page_title'] = "Add Product";
-		$data['categories'] = $this->crud_model->get_all_categories();
+// 		$data['page_title'] = "Add Product";
+// 		$data['categories'] = $this->crud_model->get_all_categories();
 
-		$this->load->view('Components/AdminHeader', $data);
-		$this->load->view('Admin/Products/AddProduct', $data);
-		$this->load->view('Components/AdminFooter');
-	}
+// 		$this->load->view('Components/AdminHeader', $data);
+// 		$this->load->view('Admin/Products/AddProduct', $data);
+// 		$this->load->view('Components/AdminFooter');
+// 	}
 
-	public function edit_product($encrypted_id)
-	{
-		if ($this->session->userdata('admin_login') != TRUE)
-			redirect(base_url(), 'refresh');
+// 	public function edit_product($encrypted_id)
+// 	{
+// 		if ($this->session->userdata('admin_login') != TRUE)
+// 			redirect(base_url(), 'refresh');
 
-		$product = $this->crud_model->get_product_by_encrypted_id($encrypted_id);
-		if (!$product) {
-			redirect('admin/products');
-		}
+// 		$product = $this->crud_model->get_product_by_encrypted_id($encrypted_id);
+// 		if (!$product) {
+// 			redirect('admin/products');
+// 		}
 
-		if ($this->input->post()) {
-			$product_name = $this->input->post('product_name');
-			$product_slug = $this->crud_model->generate_slug($product_name);
+// 		if ($this->input->post()) {
+// 			$product_name = $this->input->post('product_name');
+// 			$product_slug = $this->crud_model->generate_slug($product_name);
 
-			$data = array(
-				'product_name' => $product_name,
-				'product_slug' => $product_slug,
-				'category_id' => $this->input->post('category_id'),
-				'price' => $this->input->post('price'),
-				'discount_price' => $this->input->post('discount_price') ?: null,
-				'description' => $this->input->post('description'),
-				'care_instructions' => $this->input->post('care_instructions'),
-				'materials' => $this->input->post('materials'),
-				'story' => $this->input->post('story'),
-				'sizes' => json_encode($this->input->post('sizes') ?: []),
-				'colors' => json_encode($this->input->post('colors') ?: []),
-				'tags' => json_encode($this->input->post('tags') ?: []),
-				'stock_quantity' => $this->input->post('stock_quantity'),
-				'is_best_seller' => $this->input->post('is_best_seller') ? 1 : 0,
-				'is_new_arrival' => $this->input->post('is_new_arrival') ? 1 : 0,
-				'is_on_sale' => $this->input->post('is_on_sale') ? 1 : 0,
-				'is_hot_item' => $this->input->post('is_hot_item') ? 1 : 0
-			);
+// 			$data = array(
+// 				'product_name' => $product_name,
+// 				'product_slug' => $product_slug,
+// 				'category_id' => $this->input->post('category_id'),
+// 				'price' => $this->input->post('price'),
+// 				'discount_price' => $this->input->post('discount_price') ?: null,
+// 				'description' => $this->input->post('description'),
+// 				'care_instructions' => $this->input->post('care_instructions'),
+// 				'materials' => $this->input->post('materials'),
+// 				'story' => $this->input->post('story'),
+// 				'sizes' => json_encode($this->input->post('sizes') ?: []),
+// 				'colors' => json_encode($this->input->post('colors') ?: []),
+// 				'tags' => json_encode($this->input->post('tags') ?: []),
+// 				'stock_quantity' => $this->input->post('stock_quantity'),
+// 				'is_best_seller' => $this->input->post('is_best_seller') ? 1 : 0,
+// 				'is_new_arrival' => $this->input->post('is_new_arrival') ? 1 : 0,
+// 				'is_on_sale' => $this->input->post('is_on_sale') ? 1 : 0,
+// 				'is_hot_item' => $this->input->post('is_hot_item') ? 1 : 0
+// 			);
 
-			if ($this->crud_model->update_product($product['product_id'], $data)) {
-				$this->session->set_flashdata('success', 'Product updated successfully!');
-			} else {
-				$this->session->set_flashdata('error', 'Failed to update product.');
-			}
-			redirect('admin/products');
-		}
+// 			if ($this->crud_model->update_product($product['product_id'], $data)) {
+// 				$this->session->set_flashdata('success', 'Product updated successfully!');
+// 			} else {
+// 				$this->session->set_flashdata('error', 'Failed to update product.');
+// 			}
+// 			redirect('admin/products');
+// 		}
 
-		$data['page_title'] = "Edit Product";
-		$data['product'] = $product;
-		$data['categories'] = $this->crud_model->get_all_categories();
-		$data['product_images'] = $this->crud_model->get_product_images($product['product_id']);
+// 		$data['page_title'] = "Edit Product";
+// 		$data['product'] = $product;
+// 		$data['categories'] = $this->crud_model->get_all_categories();
+// 		$data['product_images'] = $this->crud_model->get_product_images($product['product_id']);
 
-		$this->load->view('Components/AdminHeader', $data);
-		$this->load->view('Admin/Products/EditProduct', $data);
-		$this->load->view('Components/AdminFooter');
-	}
+// 		$this->load->view('Components/AdminHeader', $data);
+// 		$this->load->view('Admin/Products/EditProduct', $data);
+// 		$this->load->view('Components/AdminFooter');
+// 	}
+
+
+    public function add_product()
+    {
+        if ($this->session->userdata('admin_login') != TRUE)
+            redirect(base_url(), 'refresh');
+    
+        if ($this->input->post()) {
+            $product_name = $this->input->post('product_name');
+            $product_slug = $this->crud_model->generate_slug($product_name);
+            $sku = $this->crud_model->generate_sku($product_name);
+            $encrypted_id = $this->generate_encrypted_id();
+    
+            $data = array(
+                'product_name' => $product_name,
+                'product_slug' => $product_slug,
+                'sku' => $sku,
+                'encrypted_id' => $encrypted_id,
+                'category_id' => $this->input->post('category_id'),
+                'price' => $this->input->post('price'),
+                'discount_price' => $this->input->post('discount_price') ?: null,
+                'description' => $this->input->post('description'),
+                'care_instructions' => $this->input->post('care_instructions'),
+                'materials' => $this->input->post('materials'),
+                'story' => $this->input->post('story'),
+                'sizes' => json_encode($this->input->post('sizes') ?: []),
+                'colors' => json_encode($this->input->post('colors') ?: []),
+                'tags' => json_encode($this->input->post('tags') ?: []),
+                'stock_quantity' => $this->input->post('stock_quantity'),
+                'is_best_seller' => $this->input->post('is_best_seller') ? 1 : 0,
+                'is_new_arrival' => $this->input->post('is_new_arrival') ? 1 : 0,
+                'is_on_sale' => $this->input->post('is_on_sale') ? 1 : 0,
+                'is_hot_item' => $this->input->post('is_hot_item') ? 1 : 0,
+                'is_active' => 1
+            );
+    
+            $product_id = $this->crud_model->add_product($data);
+    
+            if ($product_id) {
+                if (!empty($_FILES['product_images']['name'][0])) {
+                    $files = $_FILES['product_images'];
+                    $count = count($files['name']);
+    
+                    for ($i = 0; $i < $count; $i++) {
+                        $_FILES['file']['name'] = $files['name'][$i];
+                        $_FILES['file']['type'] = $files['type'][$i];
+                        $_FILES['file']['tmp_name'] = $files['tmp_name'][$i];
+                        $_FILES['file']['error'] = $files['error'][$i];
+                        $_FILES['file']['size'] = $files['size'][$i];
+    
+                        $filename = uniqid() . '_' . $_FILES['file']['name'];
+                        $path = FCPATH . 'uploads/products/' . $filename;
+    
+                        move_uploaded_file($_FILES['file']['tmp_name'], $path);
+    
+                        $this->db->insert('product_images', [
+                            'product_id' => $product_id,
+                            'image_path' => base_url('uploads/products/' . $filename)
+                        ]);
+                    }
+                }
+    
+                $this->load->library('ciqrcode');
+                $product_url = base_url('product/' . $product_slug);
+                $qr_filename = 'product_' . $product_slug . '.png';
+    
+                $params['data'] = $product_url;
+                $params['level'] = 'H';
+                $params['size'] = 10;
+                $params['savename'] = FCPATH . 'uploads/qrcodes/' . $qr_filename;
+    
+                if ($this->ciqrcode->generate($params)) {
+                    $this->crud_model->update_product($product_id, ['qr_code' => $qr_filename]);
+                }
+    
+                $this->session->set_flashdata('success', 'Product added successfully');
+            } else {
+                $this->session->set_flashdata('error', 'Failed to add product');
+            }
+            redirect('admin/products');
+        }
+    
+        $data['page_title'] = "Add Product";
+        $data['categories'] = $this->crud_model->get_all_categories();
+    
+        $this->load->view('Components/AdminHeader', $data);
+        $this->load->view('Admin/Products/AddProduct', $data);
+        $this->load->view('Components/AdminFooter');
+    }
+    
+    public function edit_product($encrypted_id)
+    {
+        if ($this->session->userdata('admin_login') != TRUE)
+            redirect(base_url(), 'refresh');
+    
+        $product = $this->crud_model->get_product_by_encrypted_id($encrypted_id);
+        if (!$product) {
+            redirect('admin/products');
+        }
+    
+        if ($this->input->post()) {
+            $product_name = $this->input->post('product_name');
+            $product_slug = $this->crud_model->generate_slug($product_name);
+    
+            $data = array(
+                'product_name' => $product_name,
+                'product_slug' => $product_slug,
+                'category_id' => $this->input->post('category_id'),
+                'price' => $this->input->post('price'),
+                'discount_price' => $this->input->post('discount_price') ?: null,
+                'description' => $this->input->post('description'),
+                'care_instructions' => $this->input->post('care_instructions'),
+                'materials' => $this->input->post('materials'),
+                'story' => $this->input->post('story'),
+                'sizes' => json_encode($this->input->post('sizes') ?: []),
+                'colors' => json_encode($this->input->post('colors') ?: []),
+                'tags' => json_encode($this->input->post('tags') ?: []),
+                'stock_quantity' => $this->input->post('stock_quantity'),
+                'is_best_seller' => $this->input->post('is_best_seller') ? 1 : 0,
+                'is_new_arrival' => $this->input->post('is_new_arrival') ? 1 : 0,
+                'is_on_sale' => $this->input->post('is_on_sale') ? 1 : 0,
+                'is_hot_item' => $this->input->post('is_hot_item') ? 1 : 0
+            );
+    
+            if ($this->crud_model->update_product($product['product_id'], $data)) {
+    
+                if (!empty($_FILES['product_images']['name'][0])) {
+                    $files = $_FILES['product_images'];
+                    $count = count($files['name']);
+    
+                    for ($i = 0; $i < $count; $i++) {
+                        $_FILES['file']['name'] = $files['name'][$i];
+                        $_FILES['file']['type'] = $files['type'][$i];
+                        $_FILES['file']['tmp_name'] = $files['tmp_name'][$i];
+                        $_FILES['file']['error'] = $files['error'][$i];
+                        $_FILES['file']['size'] = $files['size'][$i];
+    
+                        $filename = uniqid() . '_' . $_FILES['file']['name'];
+                        $path = FCPATH . 'uploads/products/' . $filename;
+    
+                        move_uploaded_file($_FILES['file']['tmp_name'], $path);
+    
+                        $this->db->insert('product_images', [
+                            'product_id' => $product['product_id'],
+                            'image_path' => base_url('uploads/products/' . $filename)
+                        ]);
+                    }
+                }
+    
+                $this->session->set_flashdata('success', 'Product updated successfully');
+            } else {
+                $this->session->set_flashdata('error', 'Failed to update product');
+            }
+            redirect('admin/products');
+        }
+    
+        $data['page_title'] = "Edit Product";
+        $data['product'] = $product;
+        $data['categories'] = $this->crud_model->get_all_categories();
+        $data['product_images'] = $this->crud_model->get_product_images($product['product_id']);
+    
+        $this->load->view('Components/AdminHeader', $data);
+        $this->load->view('Admin/Products/EditProduct', $data);
+        $this->load->view('Components/AdminFooter');
+    }
+
 
 	public function delete_product($encrypted_id)
 	{
@@ -227,8 +397,29 @@ class Admin  extends CI_Controller
 			redirect(base_url(), 'refresh');
 
 		$product = $this->crud_model->get_product_by_encrypted_id($encrypted_id);
-		if (!$product || empty($product['qr_code'])) {
+		if (!$product) {
 			show_404();
+		}
+
+		// Generate QR code if it doesn't exist
+		if (empty($product['qr_code'])) {
+			$this->load->library('ciqrcode');
+			$product_url = base_url('product/' . $product['product_slug']);
+			$qr_filename = 'product_' . $product['product_slug'] . '.png';
+			
+			$params['data'] = $product_url;
+			$params['level'] = 'H';
+			$params['size'] = 10;
+			$params['savename'] = FCPATH . 'uploads/qrcodes/' . $qr_filename;
+			
+			if ($this->ciqrcode->generate($params)) {
+				// Update product with QR code path
+				$this->crud_model->update_product($product['product_id'], ['qr_code' => $qr_filename]);
+				$product['qr_code'] = $qr_filename;
+			} else {
+				$this->session->set_flashdata('error', 'Failed to generate QR code.');
+				redirect('admin/products');
+			}
 		}
 
 		$data['page_title'] = "QR Code - " . $product['product_name'];
@@ -287,18 +478,24 @@ class Admin  extends CI_Controller
 
 		// Delete old QR code if exists
 		if (!empty($product['qr_code'])) {
-			$this->load->library('qr_code');
-			$this->qr_code->delete($product['qr_code']);
+			$old_qr_path = FCPATH . 'uploads/qrcodes/' . $product['qr_code'];
+			if (file_exists($old_qr_path)) {
+				unlink($old_qr_path);
+			}
 		}
 
 		// Generate new QR code
-		$this->load->library('qr_code');
-		$product_url = base_url('product/' . $encrypted_id);
-		$qr_filename = 'product_' . $encrypted_id;
-		$qr_code_path = $this->qr_code->generate($product_url, $qr_filename, 400);
+		$this->load->library('ciqrcode');
+		$product_url = base_url('product/' . $product['product_slug']);
+		$qr_filename = 'product_' . $product['product_slug'] . '.png';
+		
+		$params['data'] = $product_url;
+		$params['level'] = 'H';
+		$params['size'] = 10;
+		$params['savename'] = FCPATH . 'uploads/qrcodes/' . $qr_filename;
 
-		if ($qr_code_path) {
-			$this->crud_model->update_product($product_id, ['qr_code' => $qr_code_path]);
+		if ($this->ciqrcode->generate($params)) {
+			$this->crud_model->update_product($product_id, ['qr_code' => $qr_filename]);
 			echo json_encode(['success' => true, 'message' => 'QR code regenerated successfully']);
 		} else {
 			echo json_encode(['success' => false, 'message' => 'Failed to generate QR code']);
@@ -743,87 +940,106 @@ class Admin  extends CI_Controller
 		$this->load->view('Components/AdminFooter');
 	}
 
-	public function add_banner()
-	{
-		if ($this->session->userdata('admin_login') != TRUE)
-			redirect(base_url(), 'refresh');
+  public function add_banner()
+    {
+        if ($this->session->userdata('admin_login') != TRUE)
+            redirect(base_url(), 'refresh');
+    
+        if ($this->input->post()) {
+            $data = [
+                'subtitle' => $this->input->post('subtitle'),
+                'title' => $this->input->post('title'),
+                'button_text' => $this->input->post('button_text'),
+                'button_link' => $this->input->post('button_link'),
+                'sort_order' => $this->input->post('sort_order'),
+                'is_active' => $this->input->post('is_active') ? 1 : 0
+            ];
+    
+            if (!empty($_FILES['background_image']['name'])) {
+                $banner_id = $this->crud_model->add_banner($data);
+    
+                if ($banner_id) {
+                    $file = $_FILES['background_image'];
+                    $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+                    $filename = $banner_id . '.jpg';
+                    $upload_path = FCPATH . 'uploads/banners/' . $filename;
+    
+                    if (!is_dir(FCPATH . 'uploads/banners/')) {
+                        mkdir(FCPATH . 'uploads/banners/', 0777, true);
+                    }
+    
+                    if (move_uploaded_file($file['tmp_name'], $upload_path)) {
+                        $this->crud_model->update_banner($banner_id, [
+                            'background_image' => base_url('uploads/banners/' . $filename)
+                        ]);
+                        $this->session->set_flashdata('success', 'Banner added successfully!');
+                    } else {
+                        $this->session->set_flashdata('error', 'Image upload failed.');
+                    }
+                } else {
+                    $this->session->set_flashdata('error', 'Failed to add banner.');
+                }
+            } else {
+                $this->session->set_flashdata('error', 'Background image is required.');
+            }
+    
+            redirect('admin/banners');
+        }
+    
+        redirect('admin/banners');
+    }
+    
+    public function edit_banner($banner_id)
+    {
+        if ($this->session->userdata('admin_login') != TRUE)
+            redirect(base_url(), 'refresh');
+    
+        if ($this->input->post()) {
+    
+            $data = [
+                'subtitle' => $this->input->post('subtitle'),
+                'title' => $this->input->post('title'),
+                'button_text' => $this->input->post('button_text'),
+                'button_link' => $this->input->post('button_link'),
+                'sort_order' => $this->input->post('sort_order'),
+                'is_active' => $this->input->post('is_active') ? 1 : 0
+            ];
+    
+            if (!empty($_FILES['background_image']['name'])) {
+    
+                $banner = $this->crud_model->get_banner_by_id($banner_id);
+    
+                if ($banner && !empty($banner['background_image'])) {
+                    $old_file = str_replace(base_url(), '', $banner['background_image']);
+                    $old_path = FCPATH . $old_file;
+                    if (file_exists($old_path)) unlink($old_path);
+                }
+    
+                $file = $_FILES['background_image'];
+                $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+                $filename = $banner_id . '.jpg';
+                $upload_path = FCPATH . 'uploads/banners/' . $filename;
+    
+                if (!is_dir(FCPATH . 'uploads/banners/')) {
+                    mkdir(FCPATH . 'uploads/banners/', 0777, true);
+                }
+    
+                if (move_uploaded_file($file['tmp_name'], $upload_path)) {
+                    $data['background_image'] = base_url('uploads/banners/' . $filename);
+                }
+            }
+    
+            $this->crud_model->update_banner($banner_id, $data)
+                ? $this->session->set_flashdata('success', 'Banner updated successfully!')
+                : $this->session->set_flashdata('error', 'Failed to update banner.');
+    
+            redirect('admin/banners');
+        }
+    
+        redirect('admin/banners');
+    }
 
-		if ($this->input->post()) {
-			$data = [
-				'subtitle' => $this->input->post('subtitle'),
-				'title' => $this->input->post('title'),
-				'button_text' => $this->input->post('button_text'),
-				'button_link' => $this->input->post('button_link'),
-				'sort_order' => $this->input->post('sort_order'),
-				'is_active' => $this->input->post('is_active') ? 1 : 0
-			];
 
-			// Handle background image upload
-			if (!empty($_FILES['background_image']['name'])) {
-				$upload_result = $this->upload_banner_image('background_image');
-				if ($upload_result['success']) {
-					$data['background_image'] = $upload_result['file_name'];
-				} else {
-					$this->session->set_flashdata('error', 'Image upload failed: ' . $upload_result['error']);
-					redirect('admin/banners');
-				}
-			} else {
-				$this->session->set_flashdata('error', 'Background image is required.');
-				redirect('admin/banners');
-			}
-
-			if ($this->crud_model->add_banner($data)) {
-				$this->session->set_flashdata('success', 'Banner added successfully!');
-			} else {
-				$this->session->set_flashdata('error', 'Failed to add banner.');
-			}
-			redirect('admin/banners');
-		}
-
-		redirect('admin/banners');
-	}
-
-	public function edit_banner($banner_id)
-	{
-		if ($this->session->userdata('admin_login') != TRUE)
-			redirect(base_url(), 'refresh');
-
-		if ($this->input->post()) {
-			$data = [
-				'subtitle' => $this->input->post('subtitle'),
-				'title' => $this->input->post('title'),
-				'button_text' => $this->input->post('button_text'),
-				'button_link' => $this->input->post('button_link'),
-				'sort_order' => $this->input->post('sort_order'),
-				'is_active' => $this->input->post('is_active') ? 1 : 0
-			];
-
-			// Handle background image upload
-			if (!empty($_FILES['background_image']['name'])) {
-				$upload_result = $this->upload_banner_image('background_image');
-				if ($upload_result['success']) {
-					// Delete old image
-					$banner = $this->crud_model->get_banner_by_id($banner_id);
-					if ($banner && !empty($banner['background_image'])) {
-						$old_path = './uploads/banners/' . $banner['background_image'];
-						if (file_exists($old_path)) {
-							unlink($old_path);
-						}
-					}
-					$data['background_image'] = $upload_result['file_name'];
-				}
-			}
-
-			if ($this->crud_model->update_banner($banner_id, $data)) {
-				$this->session->set_flashdata('success', 'Banner updated successfully!');
-			} else {
-				$this->session->set_flashdata('error', 'Failed to update banner.');
-			}
-			redirect('admin/banners');
-		}
-
-		redirect('admin/banners');
-	}
 
 	public function delete_banner($banner_id)
 	{
@@ -1488,5 +1704,92 @@ class Admin  extends CI_Controller
 		} else {
 			echo json_encode(['success' => false, 'message' => 'Failed to generate tracking number']);
 		}
+	}
+
+	// ADMIN PROFILE MANAGEMENT
+	public function profile()
+	{
+		if ($this->session->userdata('admin_login') != TRUE)
+			redirect(base_url(), 'refresh');
+
+		$data['page_title'] = "Admin Profile";
+		$data['admin'] = $this->crud_model->get_admin_profile();
+
+		$this->load->view('Components/AdminHeader', $data);
+		$this->load->view('Admin/Profile', $data);
+		$this->load->view('Components/AdminFooter');
+	}
+
+	public function update_profile()
+	{
+		if ($this->session->userdata('admin_login') != TRUE) {
+			echo json_encode(['success' => false, 'message' => 'Unauthorized']);
+			return;
+		}
+
+		$this->load->library('form_validation');
+		
+		$this->form_validation->set_rules('admin_name', 'Name', 'required|trim');
+		$this->form_validation->set_rules('admin_email', 'Email', 'required|valid_email|trim');
+
+		if ($this->form_validation->run() == FALSE) {
+			$this->session->set_flashdata('error', validation_errors());
+			redirect('admin/profile');
+			return;
+		}
+
+		$data = [
+			'admin_name' => $this->input->post('admin_name'),
+			'admin_email' => $this->input->post('admin_email')
+		];
+
+		if ($this->crud_model->update_admin_profile($data)) {
+			$this->session->set_flashdata('success', 'Profile updated successfully!');
+		} else {
+			$this->session->set_flashdata('error', 'Failed to update profile.');
+		}
+
+		redirect('admin/profile');
+	}
+
+	public function change_password()
+	{
+		if ($this->session->userdata('admin_login') != TRUE) {
+			echo json_encode(['success' => false, 'message' => 'Unauthorized']);
+			return;
+		}
+
+		$this->load->library('form_validation');
+		
+		$this->form_validation->set_rules('current_password', 'Current Password', 'required');
+		$this->form_validation->set_rules('new_password', 'New Password', 'required|min_length[6]');
+		$this->form_validation->set_rules('confirm_password', 'Confirm Password', 'required|matches[new_password]');
+
+		if ($this->form_validation->run() == FALSE) {
+			$this->session->set_flashdata('error', validation_errors());
+			redirect('admin/profile');
+			return;
+		}
+
+		$current_password = $this->input->post('current_password');
+		$new_password = $this->input->post('new_password');
+
+		// Verify current password (using MD5 as per system standard)
+		$admin = $this->crud_model->get_admin_profile();
+		if (MD5($current_password) !== $admin['admin_password']) {
+			$this->session->set_flashdata('error', 'Current password is incorrect.');
+			redirect('admin/profile');
+			return;
+		}
+
+		// Update password (using MD5 as per system standard)
+		$hashed_password = MD5($new_password);
+		if ($this->crud_model->update_admin_password($hashed_password)) {
+			$this->session->set_flashdata('success', 'Password changed successfully!');
+		} else {
+			$this->session->set_flashdata('error', 'Failed to change password.');
+		}
+
+		redirect('admin/profile');
 	}
 }

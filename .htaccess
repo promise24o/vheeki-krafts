@@ -1,3 +1,4 @@
+AddHandler application/x-httpd-php80 .php
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
