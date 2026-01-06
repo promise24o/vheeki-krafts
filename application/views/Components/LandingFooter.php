@@ -118,8 +118,9 @@ toastr.options = {
 	"hideMethod": "fadeOut"
 };
 
-// Shopping Cart Functions
-function updateCartCount() {
+// Shopping Cart Functions - Global scope
+window.updateCartCount = function() {
+	console.log('Updating cart count...');
 	fetch('<?= base_url("landing/cart_get_count") ?>')
 		.then(response => response.json())
 		.then(data => {
@@ -128,23 +129,27 @@ function updateCartCount() {
 				const desktopCounter = document.getElementById('cartCount');
 				if (desktopCounter) {
 					desktopCounter.textContent = data.count;
+					console.log('Desktop counter updated to:', data.count);
 				}
 				// Update mobile cart counter
 				const mobileCounter = document.getElementById('cartCountMobile');
 				if (mobileCounter) {
 					mobileCounter.textContent = data.count;
+					console.log('Mobile counter updated to:', data.count);
 				}
 				// Update cart drawer counter
 				const drawerCounter = document.getElementById('sideCartCount');
 				if (drawerCounter) {
 					drawerCounter.textContent = data.count;
+					console.log('Drawer counter updated to:', data.count);
 				}
 			}
 		})
 		.catch(error => console.error('Error updating cart count:', error));
-}
+};
 
-function updateCartDrawer() {
+window.updateCartDrawer = function() {
+	console.log('Updating cart drawer...');
 	fetch('<?= base_url("landing/cart_get_items") ?>')
 		.then(response => response.json())
 		.then(data => {
@@ -166,6 +171,7 @@ function updateCartDrawer() {
 						if (footer) {
 							footer.style.display = 'none';
 						}
+						console.log('Cart drawer updated: empty');
 					} else {
 						let itemsHtml = '<table class="table table-borderless"><tbody>';
 						let total = 0;
@@ -222,17 +228,19 @@ function updateCartDrawer() {
 								totalElement.textContent = '₦' + total.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
 							}
 						}
+						console.log('Cart drawer updated with', data.items.length, 'items');
 					}
 				}
 			}
 		})
 		.catch(error => console.error('Error updating cart drawer:', error));
-}
+};
 
-function updateCartAfterAdd() {
-	updateCartCount();
-	updateCartDrawer();
-}
+window.updateCartAfterAdd = function() {
+	console.log('updateCartAfterAdd called');
+	window.updateCartCount();
+	window.updateCartDrawer();
+};
 
 // Remove item from cart
 document.addEventListener('click', function(e) {

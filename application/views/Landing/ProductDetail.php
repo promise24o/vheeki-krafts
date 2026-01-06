@@ -422,8 +422,19 @@ document.addEventListener('DOMContentLoaded', function() {
 					}
 					
 					// Update all cart elements automatically
+					console.log('Attempting to update cart...');
 					if (typeof updateCartAfterAdd === 'function') {
+						console.log('updateCartAfterAdd function found, calling it...');
 						updateCartAfterAdd();
+					} else {
+						console.log('updateCartAfterAdd function not found, updating manually...');
+						// Fallback: update cart count manually
+						const cartCountElements = document.querySelectorAll('.cart-count, #cartCount, #cartCountMobile, #sideCartCount');
+						cartCountElements.forEach(element => {
+							if (element && data.cart_count) {
+								element.textContent = data.cart_count;
+							}
+						});
 					}
 				} else {
 					if (typeof toastr !== 'undefined') {
