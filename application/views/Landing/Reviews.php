@@ -19,250 +19,93 @@
 	</section>
 
 	<section class="pt-14 pt-lg-18 mt-3">
-		<div class="container container-xxl testimonial">
-			<div class="row">
-				<div class="col-lg-4 d-flex flex-column justify-content-lg-between mb-12 mb-lg-0">
-					<div class="mt-lg-8 text-left" data-animate="fadeInUp">
-						<h2 class="mb-6">Testimonials</h2>
-						<p class="fs-18px w-80">Made using quality materials and crafted with passion, our artworks are designed to inspire everyone.</p>
-					</div>
-					<div class="d-flex mt-2 custom-arrow" data-animate="fadeInUp">
-						<div class="custom-arrows-02-prev position-static slick-arrow" aria-label="Previous" style=""><i class="far fa-chevron-left"></i></div>
-						<div class="custom-arrows-02-next position-static ms-7 slick-arrow" aria-label="Next" style=""><i class="far fa-chevron-right"></i></div>
+		<div class="container container-xxl">
+			<!-- Reviews Statistics -->
+			<div class="row mb-12">
+				<div class="col-lg-4">
+					<div class="text-center">
+						<h2 class="display-4 fw-bold text-primary mb-3"><?= $average_rating ?></h2>
+						<div class="mb-3">
+							<?php for ($i = 1; $i <= 5; $i++): ?>
+								<?php if ($i <= floor($average_rating)): ?>
+									<i class="fas fa-star text-warning"></i>
+								<?php elseif ($i == ceil($average_rating) && $average_rating < $i): ?>
+									<i class="fas fa-star-half-alt text-warning"></i>
+								<?php else: ?>
+									<i class="far fa-star text-warning"></i>
+								<?php endif; ?>
+							<?php endfor; ?>
+						</div>
+						<p class="text-muted"><?= $total_reviews ?> Reviews</p>
 					</div>
 				</div>
 				<div class="col-lg-8">
-					<div class="slick-slider custom-arrows-02 custom-slider-04" data-slick-options='{"arrows":true,"autoplay":true,"centerMode":false,"cssEase":"ease-in-out","dots":false,"fade":false,"infinite":true,"responsive":[{"breakpoint":1024,"settings":{"slidesToShow":2}},{"breakpoint":992,"settings":{"slidesToShow":2}},{"breakpoint":768,"settings":{"slidesToShow":1}}],"slidesToShow":2,"speed":600}'>
-						<div class="px-6 py-0" data-animate="fadeInUp">
-							<div class="card border-0 bg-section-3 rounded p-sm-11 p-9">
-								<div class="card-body px-4">
-									<div class="d-flex align-items-center fs-14px ls-0 mb-6">
-										<div class="rating">
-											<div class="empty-stars">
-												<span class="star">
-													<svg class="icon star-o">
-														<use xlink:href="#star-o"></use>
-													</svg>
-												</span>
-												<span class="star">
-													<svg class="icon star-o">
-														<use xlink:href="#star-o"></use>
-													</svg>
-												</span>
-												<span class="star">
-													<svg class="icon star-o">
-														<use xlink:href="#star-o"></use>
-													</svg>
-												</span>
-												<span class="star">
-													<svg class="icon star-o">
-														<use xlink:href="#star-o"></use>
-													</svg>
-												</span>
-												<span class="star">
-													<svg class="icon star-o">
-														<use xlink:href="#star-o"></use>
-													</svg>
-												</span>
-											</div>
-											<div class="filled-stars" style="width: 100%">
-												<span class="star">
-													<svg class="icon star text-primary">
-														<use xlink:href="#star"></use>
-													</svg>
-												</span>
-												<span class="star">
-													<svg class="icon star text-primary">
-														<use xlink:href="#star"></use>
-													</svg>
-												</span>
-												<span class="star">
-													<svg class="icon star text-primary">
-														<use xlink:href="#star"></use>
-													</svg>
-												</span>
-												<span class="star">
-													<svg class="icon star text-primary">
-														<use xlink:href="#star"></use>
-													</svg>
-												</span>
-												<span class="star">
-													<svg class="icon star text-primary">
-														<use xlink:href="#star"></use>
-													</svg>
-												</span>
-											</div>
-										</div>
-									</div>
-									<p class="fs-5 text-primary fw-semibold mb-11">
-										" Absolutely stunning artwork! The attention to detail and craftsmanship is exceptional. This piece has become the centerpiece of our living room. Highly recommend! "
-									</p>
-									<div class="d-flex align-items-center">
-										<div class="d-flex justify-content-start align-items-center">
-											<img src="#" data-src="/assets/images/testimonial/testimonials-05.png" alt="" class="lazy-image me-7" style="width: 60px; height: 60px">
-											<div class="author-info">
-												<h4 class="fw-bold text-uppercase mb-1 fs-15px fw-bold ls-1">SARAH M.</h4>
-												<p class="mb-0">/ New York, NY</p>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="px-6 py-0" data-animate="fadeInUp">
-							<div class="card border-0 bg-section-3 rounded p-sm-11 p-9">
-								<div class="card-body px-4">
-									<div class="d-flex align-items-center fs-14px ls-0 mb-6">
-										<div class="rating">
-											<div class="empty-stars">
-												<span class="star">
-													<svg class="icon star-o">
-														<use xlink:href="#star-o"></use>
-													</svg>
-												</span>
-												<span class="star">
-													<svg class="icon star-o">
-														<use xlink:href="#star-o"></use>
-													</svg>
-												</span>
-												<span class="star">
-													<svg class="icon star-o">
-														<use xlink:href="#star-o"></use>
-													</svg>
-												</span>
-												<span class="star">
-													<svg class="icon star-o">
-														<use xlink:href="#star-o"></use>
-													</svg>
-												</span>
-												<span class="star">
-													<svg class="icon star-o">
-														<use xlink:href="#star-o"></use>
-													</svg>
-												</span>
-											</div>
-											<div class="filled-stars" style="width: 100%">
-												<span class="star">
-													<svg class="icon star text-primary">
-														<use xlink:href="#star"></use>
-													</svg>
-												</span>
-												<span class="star">
-													<svg class="icon star text-primary">
-														<use xlink:href="#star"></use>
-													</svg>
-												</span>
-												<span class="star">
-													<svg class="icon star text-primary">
-														<use xlink:href="#star"></use>
-													</svg>
-												</span>
-												<span class="star">
-													<svg class="icon star text-primary">
-														<use xlink:href="#star"></use>
-													</svg>
-												</span>
-												<span class="star">
-													<svg class="icon star text-primary">
-														<use xlink:href="#star"></use>
-													</svg>
-												</span>
-											</div>
-										</div>
-									</div>
-									<p class="fs-5 text-primary fw-semibold mb-11">
-										" The quality exceeded my expectations! Beautiful handcrafted piece that adds so much character to my home office. Fast shipping and excellent customer service. "
-									</p>
-									<div class="d-flex align-items-center">
-										<div class="d-flex justify-content-start align-items-center">
-											<img src="#" data-src="/assets/images/testimonial/testimonials-06.png" alt="" class="lazy-image me-7" style="width: 60px; height: 60px">
-											<div class="author-info">
-												<h4 class="fw-bold text-uppercase mb-1 fs-15px fw-bold ls-1">MICHAEL R.</h4>
-												<p class="mb-0">/ Los Angeles, CA</p>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="px-6 py-0" data-animate="fadeInUp">
-							<div class="card border-0 bg-section-3 rounded p-sm-11 p-9">
-								<div class="card-body px-4">
-									<div class="d-flex align-items-center fs-14px ls-0 mb-6">
-										<div class="rating">
-											<div class="empty-stars">
-												<span class="star">
-													<svg class="icon star-o">
-														<use xlink:href="#star-o"></use>
-													</svg>
-												</span>
-												<span class="star">
-													<svg class="icon star-o">
-														<use xlink:href="#star-o"></use>
-													</svg>
-												</span>
-												<span class="star">
-													<svg class="icon star-o">
-														<use xlink:href="#star-o"></use>
-													</svg>
-												</span>
-												<span class="star">
-													<svg class="icon star-o">
-														<use xlink:href="#star-o"></use>
-													</svg>
-												</span>
-												<span class="star">
-													<svg class="icon star-o">
-														<use xlink:href="#star-o"></use>
-													</svg>
-												</span>
-											</div>
-											<div class="filled-stars" style="width: 100%">
-												<span class="star">
-													<svg class="icon star text-primary">
-														<use xlink:href="#star"></use>
-													</svg>
-												</span>
-												<span class="star">
-													<svg class="icon star text-primary">
-														<use xlink:href="#star"></use>
-													</svg>
-												</span>
-												<span class="star">
-													<svg class="icon star text-primary">
-														<use xlink:href="#star"></use>
-													</svg>
-												</span>
-												<span class="star">
-													<svg class="icon star text-primary">
-														<use xlink:href="#star"></use>
-													</svg>
-												</span>
-												<span class="star">
-													<svg class="icon star text-primary">
-														<use xlink:href="#star"></use>
-													</svg>
-												</span>
-											</div>
-										</div>
-									</div>
-									<p class="fs-5 text-primary fw-semibold mb-11">
-										" I've purchased multiple pieces from Vheeki Krafts and each one is a masterpiece. The artistic vision and skill is evident in every detail. Will definitely order again! "
-									</p>
-									<div class="d-flex align-items-center">
-										<div class="d-flex justify-content-start align-items-center">
-											<img src="#" data-src="/assets/images/testimonial/testimonials-04.png" alt="" class="lazy-image me-7" style="width: 60px; height: 60px">
-											<div class="author-info">
-												<h4 class="fw-bold text-uppercase mb-1 fs-15px fw-bold ls-1">EMILY K.</h4>
-												<p class="mb-0">/ Chicago, IL</p>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
+					<div class="d-flex justify-content-between align-items-center mb-4">
+						<h3>Customer Reviews</h3>
+						<a href="<?= base_url('admin/reviews') ?>" class="btn btn-outline-primary btn-sm">
+							<i class="fas fa-cog me-2"></i>Manage Reviews
+						</a>
 					</div>
 				</div>
+			</div>
+
+			<!-- Reviews List -->
+			<div class="row">
+				<?php if (!empty($reviews)): ?>
+					<?php foreach ($reviews as $review): ?>
+						<div class="col-lg-6 mb-8">
+							<div class="card border-0 shadow-sm h-100">
+								<div class="card-body p-6">
+									<!-- Rating Stars -->
+									<div class="d-flex align-items-center mb-4">
+										<div class="me-3">
+											<?php for ($i = 1; $i <= 5; $i++): ?>
+												<?php if ($i <= $review['rating']): ?>
+													<i class="fas fa-star text-warning"></i>
+												<?php else: ?>
+													<i class="far fa-star text-warning"></i>
+												<?php endif; ?>
+											<?php endfor; ?>
+										</div>
+										<span class="text-muted"><?= date('M d, Y', strtotime($review['created_at'])) ?></span>
+									</div>
+									
+									<!-- Review Content -->
+									<div class="mb-4">
+										<?php if (!empty($review['review_title'])): ?>
+											<h5 class="mb-2"><?= htmlspecialchars($review['review_title']) ?></h5>
+										<?php endif; ?>
+										<p class="mb-3"><?= htmlspecialchars($review['review_text']) ?></p>
+									</div>
+									
+									<!-- Reviewer Info -->
+									<div class="d-flex align-items-center justify-content-between">
+										<div>
+											<h6 class="mb-0 fw-semibold"><?= htmlspecialchars($review['customer_name']) ?></h6>
+											<small class="text-muted">
+												<?php if (isset($review['product_name'])): ?>
+													Reviewed: <?= htmlspecialchars($review['product_name']) ?>
+												<?php endif; ?>
+											</small>
+										</div>
+										<?php if (!empty($review['reviewer_portfolio'])): ?>
+											<a href="<?= htmlspecialchars($review['reviewer_portfolio']) ?>" target="_blank" class="btn btn-sm btn-outline-secondary">
+												<i class="fas fa-external-link-alt me-1"></i>Portfolio
+											</a>
+										<?php endif; ?>
+									</div>
+								</div>
+							</div>
+						</div>
+					<?php endforeach; ?>
+				<?php else: ?>
+					<div class="col-12 text-center py-12">
+						<i class="fas fa-star fa-3x text-muted mb-4"></i>
+						<h4 class="text-muted mb-3">No Reviews Yet</h4>
+						<p class="text-muted">Be the first to share your experience with Vheeki Krafts!</p>
+						<a href="<?= base_url('shop') ?>" class="btn btn-primary mt-3">Browse Products</a>
+					</div>
+				<?php endif; ?>
 			</div>
 		</div>
 	</section>

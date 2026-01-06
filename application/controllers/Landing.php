@@ -467,6 +467,20 @@ class Landing extends CI_Controller {
         $data = $this->get_base_data();
         $data['title'] = 'Customer Reviews';
         $data['description'] = 'Read genuine testimonials from art lovers who have transformed their spaces with Vheeki Krafts unique handcrafted pieces.';
+        
+        // Get approved reviews from database
+        $this->load->model('crud_model');
+        $data['reviews'] = $this->crud_model->get_all_reviews(true); // true = approved only
+        $data['total_reviews'] = count($data['reviews']);
+        
+        // Calculate average rating
+        if (!empty($data['reviews'])) {
+            $total_rating = array_sum(array_column($data['reviews'], 'rating'));
+            $data['average_rating'] = round($total_rating / count($data['reviews']), 1);
+        } else {
+            $data['average_rating'] = 0;
+        }
+        
         $this->load->view('Components/LandingHeader', $data);
         $this->load->view('Landing/Reviews', $data);
         $this->load->view('Components/LandingFooter', $data);
