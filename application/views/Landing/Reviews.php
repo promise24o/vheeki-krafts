@@ -40,11 +40,8 @@
 					</div>
 				</div>
 				<div class="col-lg-8">
-					<div class="d-flex justify-content-between align-items-center mb-4">
+					<div class="mb-4">
 						<h3>Customer Reviews</h3>
-						<a href="<?= base_url('admin/reviews') ?>" class="btn btn-outline-primary btn-sm">
-							<i class="fas fa-cog me-2"></i>Manage Reviews
-						</a>
 					</div>
 				</div>
 			</div>
