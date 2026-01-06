@@ -171,7 +171,13 @@
                                         <i class="bi bi-telephone fs-4 text-primary me-3"></i>
                                         <div>
                                             <h6 class="mb-1">Phone</h6>
-                                            <a href="tel:+2348030001111" class="text-body">+234 803 000 1111</a>
+                                            <?php if (isset($settings['contact_mobile']) && !empty($settings['contact_mobile'])): ?>
+                                                <a href="tel:<?= htmlspecialchars(str_replace(' ', '', $settings['contact_mobile'])) ?>" class="text-decoration-none text-primary">
+                                                    <?= htmlspecialchars($settings['contact_mobile']) ?>
+                                                </a>
+                                            <?php else: ?>
+                                                <a href="tel:+2348030001111" class="text-body">+234 803 000 1111</a>
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                 </div>
