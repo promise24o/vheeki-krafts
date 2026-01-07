@@ -724,7 +724,7 @@ private function get_next_testimonial_sort_order()
 				error_log("Cart Debug - Image path: " . $image['image_path']);
 			}
 			
-			$item['image'] = $image ? base_url($image['image_path']) : null;
+			$item['image'] = $image ? ($image['image_path']) : null;
 			
 			// Calculate subtotal
 			$price = $item['discount_price'] ? $item['discount_price'] : $item['price'];
