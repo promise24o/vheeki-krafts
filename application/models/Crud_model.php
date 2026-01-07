@@ -703,11 +703,27 @@ private function get_next_testimonial_sort_order()
 
 		// Get primary image for each product
 		foreach ($items as &$item) {
+			// First try to get primary image
 			$this->db->where('product_id', $item['product_id']);
 			$this->db->where('is_primary', 1);
 			$this->db->order_by('sort_order', 'ASC');
 			$this->db->limit(1);
 			$image = $this->db->get('product_images')->row_array();
+			
+			// If no primary image, get any image for this product
+			if (!$image) {
+				$this->db->where('product_id', $item['product_id']);
+				$this->db->order_by('sort_order', 'ASC');
+				$this->db->limit(1);
+				$image = $this->db->get('product_images')->row_array();
+			}
+			
+			// Debug: Log the image query results
+			error_log("Cart Debug - Product ID: " . $item['product_id'] . ", Image found: " . ($image ? 'YES' : 'NO'));
+			if ($image) {
+				error_log("Cart Debug - Image path: " . $image['image_path']);
+			}
+			
 			$item['image'] = $image ? base_url($image['image_path']) : null;
 			
 			// Calculate subtotal

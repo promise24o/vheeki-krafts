@@ -39,8 +39,8 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 *.stTheme.cache
 
 # Uploads (if you have user-uploaded files)
-uploads/*
-!uploads/.htaccess
+# uploads/*
+# !uploads/.htaccess
 
 # Environment & Config (IMPORTANT - Don't commit sensitive data)
 .env
