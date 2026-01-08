@@ -17,7 +17,7 @@
                         <p class="mb-8">At Vheeki Krafts, we capture moments and transform them into timeless visual art. Each frame begins as a photograph carefully composed, color-graded, and refined to express emotion and meaning.</p>
                     <?php endif; ?>
                     
-                    <p class="mb-xl-16">Our works go beyond simple pictures—they tell stories, reflect moods, and bring character into every space they adorn. We believe art should speak not just to the eyes, but to the soul. That's why every piece we create is <span class="text-body-emphasis">crafted with detail, creativity, and passion</span>, ensuring it connects deeply with those who see it.</p>
+                    <!-- <p class="mb-xl-16">Our works go beyond simple pictures—they tell stories, reflect moods, and bring character into every space they adorn. We believe art should speak not just to the eyes, but to the soul. That's why every piece we create is <span class="text-body-emphasis">crafted with detail, creativity, and passion</span>, ensuring it connects deeply with those who see it.</p> -->
                     
                     <div class="row">
                         <?php if (isset($settings['contact_mobile']) && !empty($settings['contact_mobile'])): ?>
