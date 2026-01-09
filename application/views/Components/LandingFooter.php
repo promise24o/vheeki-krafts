@@ -1308,6 +1308,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		<div id="cartItemsContainer" class="shopping-cart pb-8 pb-lg-10">
 			<?php
 			$session_id = $this->session->userdata('session_id') ?: session_id();
+			$this->session->set_userdata('session_id', $session_id);
 			$this->load->model('crud_model');
 			$cart_items = $this->crud_model->get_cart_items($session_id);
 			$cart_total = array_sum(array_column($cart_items, 'subtotal'));

@@ -108,6 +108,7 @@
 										style="width:18px;height:18px;font-size:10px;">
 										<?php 
 										$session_id = $this->session->userdata('session_id') ?: session_id();
+										$this->session->set_userdata('session_id', $session_id);
 										$this->load->model('crud_model');
 										echo $this->crud_model->get_cart_count($session_id);
 										?>
@@ -182,6 +183,7 @@
 											style="--square-size: 18px">
 											<?php 
 											$session_id = $this->session->userdata('session_id') ?: session_id();
+											$this->session->set_userdata('session_id', $session_id);
 											$this->load->model('crud_model');
 											echo $this->crud_model->get_cart_count($session_id);
 											?>
