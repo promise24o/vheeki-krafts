@@ -156,6 +156,8 @@ window.updateCartDrawer = function() {
 			if (data.success) {
 				const container = document.getElementById('cartItemsContainer');
 				const footer = document.querySelector('#shoppingCart .offcanvas-footer');
+				console.log('Footer element found:', footer);
+				console.log('Shopping cart element:', document.getElementById('shoppingCart'));
 				
 				if (container) {
 					if (data.items.length === 0) {
@@ -170,6 +172,9 @@ window.updateCartDrawer = function() {
 						`;
 						if (footer) {
 							footer.style.display = 'none';
+							console.log('Footer hidden for empty cart');
+						} else {
+							console.log('Footer not found for empty cart');
 						}
 						console.log('Cart drawer updated: empty');
 					} else {
@@ -229,11 +234,14 @@ window.updateCartDrawer = function() {
 						container.innerHTML = itemsHtml;
 						
 						if (footer) {
-							footer.style.display = 'block';
+							footer.style.display = 'flex';
+							console.log('Footer found and displayed');
 							const totalElement = document.getElementById('sideCartTotal');
 							if (totalElement) {
 								totalElement.textContent = '₦' + total.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
 							}
+						} else {
+							console.log('Footer not found with selector #shoppingCart .offcanvas-footer');
 						}
 						console.log('Cart drawer updated with', data.items.length, 'items');
 					}
