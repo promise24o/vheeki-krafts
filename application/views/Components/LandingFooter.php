@@ -237,7 +237,11 @@ window.updateCartDrawer = function() {
 						}
 						console.log('Cart drawer updated with', data.items.length, 'items');
 					}
+				} else {
+					console.error('Cart container not found');
 				}
+			} else {
+				console.error('Failed to update cart drawer:', data);
 			}
 		})
 		.catch(error => console.error('Error updating cart drawer:', error));
@@ -245,8 +249,11 @@ window.updateCartDrawer = function() {
 
 window.updateCartAfterAdd = function() {
 	console.log('updateCartAfterAdd called');
-	window.updateCartCount();
-	window.updateCartDrawer();
+	// Add a small delay to ensure the server has processed the cart addition
+	setTimeout(() => {
+		window.updateCartCount();
+		window.updateCartDrawer();
+	}, 100);
 };
 
 // Remove item from cart
@@ -338,12 +345,18 @@ function updateCartQuantity(cartId, quantity) {
 	});
 }
 
-// Update side cart count on page load
+// Update side cart count on page load and initialize cart drawer
 document.addEventListener('DOMContentLoaded', function() {
 	const cartCount = document.getElementById('cartCount');
 	if (cartCount) {
 		document.getElementById('sideCartCount').textContent = cartCount.textContent;
 	}
+	
+	// Initialize cart drawer on page load to ensure it's always up to date
+	window.updateCartDrawer();
+	
+	// Also update cart count to ensure consistency
+	window.updateCartCount();
 });
 </script>
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
