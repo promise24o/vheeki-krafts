@@ -156,8 +156,6 @@ window.updateCartDrawer = function() {
 			if (data.success) {
 				const container = document.getElementById('cartItemsContainer');
 				const footer = document.querySelector('#shoppingCart .offcanvas-footer');
-				console.log('Footer element found:', footer);
-				console.log('Shopping cart element:', document.getElementById('shoppingCart'));
 				
 				if (container) {
 					if (data.items.length === 0) {
@@ -172,9 +170,6 @@ window.updateCartDrawer = function() {
 						`;
 						if (footer) {
 							footer.style.display = 'none';
-							console.log('Footer hidden for empty cart');
-						} else {
-							console.log('Footer not found for empty cart');
 						}
 						console.log('Cart drawer updated: empty');
 					} else {
@@ -235,13 +230,10 @@ window.updateCartDrawer = function() {
 						
 						if (footer) {
 							footer.style.display = 'flex';
-							console.log('Footer found and displayed');
 							const totalElement = document.getElementById('sideCartTotal');
 							if (totalElement) {
 								totalElement.textContent = '₦' + total.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
 							}
-						} else {
-							console.log('Footer not found with selector #shoppingCart .offcanvas-footer');
 						}
 						console.log('Cart drawer updated with', data.items.length, 'items');
 					}
@@ -1384,8 +1376,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			<?php endif; ?>
 		</div>
 	</div>
-	<?php if (!empty($cart_items)): ?>
-	<div class="offcanvas-footer flex-wrap">
+	<div class="offcanvas-footer flex-wrap" style="display: <?php echo !empty($cart_items) ? 'flex' : 'none'; ?>;">
 		<div class="d-flex align-items-center justify-content-between w-100 mb-5">
 			<span class="text-body-emphasis">Total price:</span>
 			<span class="cart-total fw-bold text-body-emphasis" id="sideCartTotal">₦<?= number_format($cart_total, 2) ?></span>
@@ -1393,7 +1384,6 @@ document.addEventListener('DOMContentLoaded', function() {
 		<a href="<?= base_url('checkout') ?>" class="btn btn-dark w-100 mb-7" title="Check Out">Check Out</a>
 		<a href="<?= base_url('cart') ?>" class="btn btn-outline-dark w-100" title="View shopping cart">View Shopping Cart</a>
 	</div>
-	<?php endif; ?>
 </div>
 
 <div class="modal fade" id="quickViewModal" aria-labelledby="quickViewModal" aria-hidden="true">
